@@ -2,33 +2,11 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { adminFooterItems, adminNavItems, trainerNavItems } from '@/lib/constants/menu';
-import { SharedData } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
-import { NavItem } from '../types/index';
+import { adminFooterItems, adminNavItems } from '@/lib/constants/menu';
+import { Link } from '@inertiajs/react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
-    const { auth } = usePage<SharedData>().props;
-
-    let navItems: NavItem[];
-    let footerNavItems: NavItem[];
-
-    switch (auth.role) {
-        case 'admin':
-        case 'staff':
-            navItems = adminNavItems;
-            footerNavItems = adminFooterItems;
-            break;
-        case 'trainer':
-            navItems = trainerNavItems;
-            footerNavItems = [];
-            break;
-        default:
-            navItems = [];
-            footerNavItems = [];
-    }
-
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -44,11 +22,11 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={navItems} />
+                <NavMain items={adminNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavFooter items={adminFooterItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
