@@ -23,7 +23,7 @@ export default function Trainers({ trainers }: Props) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Professional Trainers</h1>
                     <Button size={'sm'} asChild>
-                        <Link href="">
+                        <Link href={route('admin.trainers.create')}>
                             <PlusCircle />
                             <span className="hidden sm:block">Add Trainer</span>
                         </Link>

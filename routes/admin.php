@@ -10,6 +10,7 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/trainers')->group(function () {
             Route::get('/', [TrainerController::class, 'index'])->name('admin.trainers.index');
+            Route::get('/create', [TrainerController::class, 'create'])->name('admin.trainers.create');
         });
     });
 });

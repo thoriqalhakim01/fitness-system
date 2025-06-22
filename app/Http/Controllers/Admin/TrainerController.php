@@ -10,4 +10,9 @@ class TrainerController extends Controller
     {
         return Inertia::render('admin/trainers/index');
     }
+
+    public function create()
+    {
+        return Inertia::render('admin/trainers/create');
+    }
 }

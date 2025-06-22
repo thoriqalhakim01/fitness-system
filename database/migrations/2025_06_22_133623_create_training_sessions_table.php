@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('training_sessions', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('staff_id')->nullable()->references('id')->on('staffs')->onDelete('set null');
+            $table->foreignUlid('staff_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->foreignUlid('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
             $table->timestamp('entry_timestamp');
             $table->timestamps();

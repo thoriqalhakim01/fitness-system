@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('staff_id')->nullable()->references('id')->on('staffs')->onDelete('set null');
+            $table->foreignUlid('staff_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->foreignUlid('trainer_id')->nullable()->references('id')->on('trainers')->onDelete('set null');
             $table->string('rfid_uid')->nullable();
             $table->string('name');

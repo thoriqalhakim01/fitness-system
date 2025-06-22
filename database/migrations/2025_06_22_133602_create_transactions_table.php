@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('staff_id')->nullable()->references('id')->on('staffs')->onDelete('set null');
+            $table->foreignUlid('staff_id')->nullable()->references('id')->on('users')->onDelete('set null');
             $table->foreignUlid('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->foreignUlid('package_id')->nullable()->references('id')->on('packages')->onDelete('set null');
             $table->timestamp('transaction_date');
