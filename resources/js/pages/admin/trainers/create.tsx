@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { X } from 'lucide-react';
+import { useEffect } from 'react';
 import CreateTrainerForm from './_components/create-trainer-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -17,7 +18,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function CreateTrainer() {
+type Props = {
+    error?: string;
+};
+
+export default function CreateTrainer({ error }: Props) {
+    console.log(error);
+
+    useEffect(() => {
+        if (error) {
+            //
+        }
+    }, [error]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trainers" />
@@ -32,7 +44,7 @@ export default function CreateTrainer() {
                     </Button>
                 </div>
                 <Separator />
-                <div className='w-full max-w-lg mx-auto'>
+                <div className="mx-auto w-full max-w-lg">
                     <CreateTrainerForm />
                 </div>
             </div>

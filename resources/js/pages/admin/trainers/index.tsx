@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { PlusCircle } from 'lucide-react';
+import { useEffect } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,9 +14,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type Props = {
     trainers: Trainer[];
+    flash?: {
+        success?: string;
+        error?: string;
+    };
 };
 
-export default function Trainers({ trainers }: Props) {
+export default function Trainers({ trainers, flash }: Props) {
+    console.log(flash);
+
+    useEffect(() => {
+        if (flash?.success) {
+            //
+        } else if (flash?.error) {
+            //
+        }
+    }, [flash]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trainers" />

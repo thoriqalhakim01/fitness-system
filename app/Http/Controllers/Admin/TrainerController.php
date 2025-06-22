@@ -2,17 +2,63 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreTrainerRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class TrainerController extends Controller
 {
     public function index()
     {
-        return Inertia::render('admin/trainers/index');
+        return Inertia::render('admin/trainers/index', [
+            'flash' => [
+                'success' => session('success'),
+                'error'   => session('error'),
+            ],
+        ]);
     }
 
     public function create()
     {
         return Inertia::render('admin/trainers/create');
+    }
+
+    public function store(StoreTrainerRequest $request)
+    {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+            $generatedPassword = substr(str_shuffle('0123456789'), 0, 8);
+
+            $user = User::create([
+                'name'     => $validated['name'],
+                'email'    => $validated['email'],
+                'password' => Hash::make($generatedPassword),
+                'phone'    => $validated['phone'],
+            ]);
+
+            $user->assignRole('trainer');
+
+            $user->trainer()->create([
+                'rfid_uid' => $validated['rfid_uid'],
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.trainers.index')->with('success', 'Trainer created successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Trainer creation failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to create trainer. Please try again.'])
+                ->withInput();
+        }
     }
 }

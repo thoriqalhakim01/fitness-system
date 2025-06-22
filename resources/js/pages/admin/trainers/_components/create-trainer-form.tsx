@@ -18,7 +18,7 @@ type CreateForm = {
 export default function CreateTrainerForm() {
     const { auth } = usePage<SharedData>().props;
 
-    const { data, setData, post, processing, errors } = useForm<CreateForm>({
+    const { data, setData, post, processing, errors, reset } = useForm<CreateForm>({
         staff_id: auth.user.id,
         rfid_uid: '',
         name: '',
@@ -29,7 +29,10 @@ export default function CreateTrainerForm() {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log(data);
+        post(route('admin.trainers.store'), {
+            preserveScroll: true,
+            onSuccess: () => reset(),
+        });
     };
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
