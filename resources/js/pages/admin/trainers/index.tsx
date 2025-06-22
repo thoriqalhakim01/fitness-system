@@ -4,6 +4,7 @@ import { Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { PlusCircle } from 'lucide-react';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,9 +26,9 @@ export default function Trainers({ trainers, flash }: Props) {
 
     useEffect(() => {
         if (flash?.success) {
-            //
+            toast.success(flash.success);
         } else if (flash?.error) {
-            //
+            toast.error(flash.error);
         }
     }, [flash]);
     return (
