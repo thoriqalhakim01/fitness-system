@@ -14,32 +14,32 @@ export const adminNavItems: NavItem[] = [
     },
     {
         title: 'Members',
-        href: '/dashboard/trainers',
+        href: '/dashboard/members',
         icon: Users,
     },
     {
         title: 'Attendance History',
-        href: '/dashboard/trainers',
+        href: '/dashboard/attendances',
         icon: Users,
     },
     {
         title: 'Packages',
-        href: '/dashboard/trainers',
+        href: '/dashboard/packages',
         icon: SquareLibrary,
     },
     {
         title: 'Transactions',
-        href: '/dashboard/trainers',
+        href: '/dashboard/transactions',
         icon: ArrowLeftRight,
     },
     {
         title: 'Staffs',
-        href: '/dashboard/trainers',
+        href: '/dashboard/staffs',
         icon: MonitorCog,
     },
     {
         title: 'Report & Analytics',
-        href: '/dashboard/trainers',
+        href: '/dashboard/report-analytics',
         icon: ChartSpline,
     },
 ];
