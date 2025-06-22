@@ -5,6 +5,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import CreateTrainerForm from './_components/create-trainer-form';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -23,11 +24,9 @@ type Props = {
 };
 
 export default function CreateTrainer({ error }: Props) {
-    console.log(error);
-
     useEffect(() => {
         if (error) {
-            //
+            toast.error(error);
         }
     }, [error]);
     return (

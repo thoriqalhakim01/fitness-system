@@ -1,10 +1,14 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { Trainer, type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
-import { PlusCircle } from 'lucide-react';
+import { FilterParams, Trainer, type BreadcrumbItem } from '@/types';
+import { Head, Link, router } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { PaginatedResponse } from '../../../types/index';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type Props = {
-    trainers: Trainer[];
+    trainers: PaginatedResponse<Trainer>;
     flash?: {
         success?: string;
         error?: string;
@@ -22,8 +26,6 @@ type Props = {
 };
 
 export default function Trainers({ trainers, flash }: Props) {
-    console.log(flash);
-
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -31,6 +33,17 @@ export default function Trainers({ trainers, flash }: Props) {
             toast.error(flash.error);
         }
     }, [flash]);
+
+    const handlePageChange = (page: number) => {
+        const params: FilterParams = {
+            page,
+        };
+
+        router.get(route('admin.trainers.index'), params, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trainers" />
@@ -44,6 +57,85 @@ export default function Trainers({ trainers, flash }: Props) {
                         </Link>
                     </Button>
                 </div>
+                <Separator />
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>
+                                <Hash size={16} />
+                            </TableHead>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Email</TableHead>
+                            <TableHead>Phone number</TableHead>
+                            <TableHead className="text-center">Members Trained</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {trainers.data.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell className="font-mono">{item.rfid_uid}</TableCell>
+                                <TableCell>{item.user.name}</TableCell>
+                                <TableCell>{item.user.email}</TableCell>
+                                <TableCell>{item.user.phone}</TableCell>
+                                <TableCell className="text-center">
+                                    <Badge>{item.members?.length}</Badge>
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                    <Button variant={'ghost'} size={'icon'} asChild>
+                                        <Link href="">
+                                            <Eye />
+                                        </Link>
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        {trainers.data.length === 0 && (
+                            <TableRow>
+                                <TableCell colSpan={5} className="h-24 text-center">
+                                    No trainers found.
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+                {trainers.total > 0 && (
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm text-muted-foreground">
+                            Showing {trainers.from} to {trainers.to} of {trainers.total} results
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => handlePageChange(trainers.current_page - 1)}
+                                disabled={trainers.current_page === 1}
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <div className="flex items-center space-x-1">
+                                {Array.from({ length: trainers.last_page }, (_, i) => i + 1).map((page) => (
+                                    <Button
+                                        key={page}
+                                        variant={page === trainers.current_page ? 'default' : 'outline'}
+                                        size="icon"
+                                        onClick={() => handlePageChange(page)}
+                                    >
+                                        {page}
+                                    </Button>
+                                ))}
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => handlePageChange(trainers.current_page + 1)}
+                                disabled={trainers.current_page === trainers.last_page}
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

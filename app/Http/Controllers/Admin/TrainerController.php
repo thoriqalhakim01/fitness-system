@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTrainerRequest;
+use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,8 +14,13 @@ class TrainerController extends Controller
 {
     public function index()
     {
+        $query = Trainer::query()->with(['user', 'members']);
+
+        $trainers = $query->paginate(20);
+
         return Inertia::render('admin/trainers/index', [
-            'flash' => [
+            'trainers' => $trainers,
+            'flash'    => [
                 'success' => session('success'),
                 'error'   => session('error'),
             ],

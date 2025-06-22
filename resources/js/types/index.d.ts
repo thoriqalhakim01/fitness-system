@@ -32,6 +32,26 @@ export interface SharedData {
     [key: string]: unknown;
 }
 
+export interface PaginatedResponse<T> {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number;
+    to: number;
+}
+
+export interface FilterParams {
+    page?: number;
+    search?: string;
+    status?: string;
+    type?: string;
+    start_date?: string;
+    end_date?: string;
+    [key: string]: string | number | undefined | null;
+}
+
 export interface User {
     id: string;
     name: string;
@@ -45,10 +65,16 @@ export interface User {
 }
 
 export interface Trainer {
-    id: number;
-    user: User;
+    id: string;
     rfid_uid: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+
+    user: User;
+    members?: Member[];
+}
+
+export interface Member {
+    id: string;
 }
