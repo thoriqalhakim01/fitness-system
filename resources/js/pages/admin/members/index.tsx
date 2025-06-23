@@ -51,7 +51,7 @@ export default function Members({ members, flash }: Props) {
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Our Members</h1>
                     <Button size={'sm'} asChild>
-                        <Link href="">
+                        <Link href={route('admin.members.create')}>
                             <PlusCircle />
                             <span className="hidden sm:block">Add Member</span>
                         </Link>

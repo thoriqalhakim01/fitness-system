@@ -21,6 +21,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/members')->group(function () {
             Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
+            Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
+            Route::post('/create', [MemberController::class, 'store'])->name('admin.members.store');
         });
     });
 });

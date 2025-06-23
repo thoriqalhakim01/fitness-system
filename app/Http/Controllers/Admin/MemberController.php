@@ -2,7 +2,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreMemberRequest;
 use App\Models\Member;
+use App\Models\Trainer;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class MemberController extends Controller
@@ -20,5 +24,56 @@ class MemberController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function create()
+    {
+        $trainers = Trainer::with('user')->get();
+
+        return Inertia::render('admin/members/create', [
+            'trainers' => $trainers,
+            'error'    => session('error'),
+        ]);
+    }
+
+    public function store(StoreMemberRequest $request)
+    {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
+        $isMember = isset($validated['is_member']) && $validated['is_member'] === '1';
+
+        try {
+            $member = Member::create([
+                'staff_id'          => $validated['staff_id'],
+                'trainer_id'        => $validated['trainer_id'],
+                'rfid_uid'          => $isMember ? $validated['rfid_uid'] : null,
+                'name'              => $validated['name'],
+                'email'             => $validated['email'],
+                'phone'             => $validated['phone'],
+                'registration_date' => $validated['registration_date'],
+                'is_member'         => $isMember,
+            ]);
+
+            if ($isMember) {
+                $member->points()->create([
+                    'points'     => 0,
+                    'expires_at' => now()->timezone('Asia/Jakarta')->addDays(30),
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.members.index')->with('success', 'Member created successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Member creation failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to create member. Please try again.'])
+                ->withInput();
+        }
     }
 }
