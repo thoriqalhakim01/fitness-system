@@ -44,7 +44,7 @@ export default function ShowMember({ member, flash }: Props) {
                     <h1 className="text-2xl font-bold">Members Details</h1>
                     <div className="flex items-center gap-2">
                         <Button size={'sm'} asChild>
-                            <Link href="">
+                            <Link href={route('admin.members.edit', member.id)}>
                                 <PencilLine />
                                 <span className="hidden sm:block">Edit</span>
                             </Link>

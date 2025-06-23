@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMemberRequest;
+use App\Http\Requests\Admin\UpdateMemberRequest;
 use App\Models\Member;
 use App\Models\Trainer;
 use Illuminate\Support\Facades\DB;
@@ -88,5 +89,63 @@ class MemberController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function edit(string $id)
+    {
+        $member   = Member::with('trainer')->findOrFail($id);
+        $trainers = Trainer::with('user')->get();
+
+        return Inertia::render('admin/members/edit', [
+            'member'   => $member,
+            'trainers' => $trainers,
+            'error'    => session('error'),
+        ]);
+    }
+
+    public function update(UpdateMemberRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
+        $isMember = isset($validated['is_member']) && $validated['is_member'] === '1';
+
+        try {
+            $member = Member::findOrFail($id);
+
+            $member->update([
+                'trainer_id'        => $validated['trainer_id'],
+                'rfid_uid'          => $isMember ? $validated['rfid_uid'] : null,
+                'name'              => $validated['name'],
+                'email'             => $validated['email'],
+                'phone'             => $validated['phone'],
+                'registration_date' => $validated['registration_date'],
+                'is_member'         => $isMember,
+            ]);
+
+            if ($isMember && ! $member->points) {
+                $member->points()->create([
+                    'balance'    => 0,
+                    'expires_at' => now()->timezone('Asia/Jakarta'),
+                ]);
+            }
+
+            if (! $isMember && $member->points) {
+                $member->points()->delete();
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.members.show', $id)->with('success', 'Member updated successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Member update failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to update member. Please try again.'])
+                ->withInput();
+        }
     }
 }

@@ -33,17 +33,25 @@ export default function MemberDetails({ member }: Props) {
             </div>
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm">
+                    <span className="font-medium">Trainer:</span>
+                    <span>{member.trainer.user.name}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Membership type:</span>
                     <span>{member.is_member ? 'Active Member' : 'Non-member'}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="font-medium">RFID:</span>
-                    <span className="font-mono">{member.rfid_uid}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="font-medium">Points:</span>
-                    <Badge>{member.points?.points}</Badge>
-                </div>
+                {member.is_member && (
+                    <>
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">RFID:</span>
+                            <span className="font-mono">{member.rfid_uid}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                            <span className="font-medium">Points:</span>
+                            <Badge>{member.points?.points}</Badge>
+                        </div>
+                    </>
+                )}
             </div>
             <Separator />
             <div className="flex flex-col gap-2">

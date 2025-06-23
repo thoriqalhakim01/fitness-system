@@ -24,6 +24,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
             Route::post('/create', [MemberController::class, 'store'])->name('admin.members.store');
             Route::get('/{id}', [MemberController::class, 'show'])->name('admin.members.show');
+            Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
+            Route::put('/{id}/edit', [MemberController::class, 'update'])->name('admin.members.update');
         });
     });
 });
