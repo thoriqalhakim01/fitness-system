@@ -86,9 +86,13 @@ export interface Member {
     registration_date: string | null;
     status: string;
     is_member: boolean;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
 
     trainer: Trainer;
     staff: User;
+    points: Point;
 }
 
 export interface TrainingSession {
@@ -97,4 +101,13 @@ export interface TrainingSession {
 
     staff?: User;
     trainer?: Trainer;
+}
+
+export interface Point {
+    id: string;
+    points: number;
+    expires_at: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
 }

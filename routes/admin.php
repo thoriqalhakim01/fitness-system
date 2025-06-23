@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\TrainerController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,10 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/{id}/edit', [TrainerController::class, 'edit'])->name('admin.trainers.edit');
             Route::put('/{id}/edit', [TrainerController::class, 'update'])->name('admin.trainers.update');
             Route::delete('/{id}', [TrainerController::class, 'destroy'])->name('admin.trainers.destroy');
+        });
+
+        Route::prefix('/members')->group(function () {
+            Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
         });
     });
 });
