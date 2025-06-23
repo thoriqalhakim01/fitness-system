@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTrainerRequest;
+use App\Http\Requests\Admin\UpdateTrainerRequest;
 use App\Models\Trainer;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -79,5 +80,48 @@ class TrainerController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function edit(string $id)
+    {
+        $trainer = Trainer::with(['user'])->findOrFail($id);
+
+        return Inertia::render('admin/trainers/edit', [
+            'trainer' => $trainer,
+            'error'   => session('error'),
+        ]);
+    }
+
+    public function update(UpdateTrainerRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+            $trainer = Trainer::with(['user'])->findOrFail($id);
+
+            $trainer->user()->update([
+                'name'  => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+            ]);
+
+            $trainer->update([
+                'rfid_uid' => $validated['rfid_uid'],
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.trainers.show', $trainer->id)->with('success', 'Trainer updated successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Trainer update failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to update trainer. Please try again.'])
+                ->withInput();
+        }
     }
 }
