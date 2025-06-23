@@ -122,3 +122,14 @@ export interface Attendance {
 
     staff: User;
 }
+
+export interface Package {
+    id: string;
+    name: string;
+    price: number;
+    points: number;
+    duration: number;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+}

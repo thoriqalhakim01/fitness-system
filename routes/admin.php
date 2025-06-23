@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\TrainerController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,13 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
             Route::put('/{id}/edit', [MemberController::class, 'update'])->name('admin.members.update');
             Route::delete('/{id}', [MemberController::class, 'destroy'])->name('admin.members.destroy');
+        });
+
+        Route::prefix('/packages')->group(function () {
+            Route::get('/', [PackageController::class, 'index'])->name('admin.packages.index');
+            Route::post('/', [PackageController::class, 'store'])->name('admin.packages.store');
+            Route::put('/{id}', [PackageController::class, 'update'])->name('admin.packages.update');
+            Route::delete('/{id}', [PackageController::class, 'destroy'])->name('admin.packages.destroy');
         });
     });
 });
