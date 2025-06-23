@@ -85,7 +85,7 @@ export default function Members({ members, flash }: Props) {
                                 </TableCell>
                                 <TableCell className="flex justify-end">
                                     <Button variant={'ghost'} size={'icon'} asChild>
-                                        <Link href="">
+                                        <Link href={route('admin.members.show', item.id)}>
                                             <Eye />
                                         </Link>
                                     </Button>

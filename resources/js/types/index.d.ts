@@ -93,6 +93,7 @@ export interface Member {
     trainer: Trainer;
     staff: User;
     points: Point;
+    attendances: Attendance[];
 }
 
 export interface TrainingSession {
@@ -110,4 +111,14 @@ export interface Point {
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+}
+
+export interface Attendance {
+    id: string;
+    entry_timestamp: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+
+    staff: User;
 }

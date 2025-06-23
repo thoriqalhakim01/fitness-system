@@ -76,4 +76,17 @@ class MemberController extends Controller
                 ->withInput();
         }
     }
+
+    public function show(string $id)
+    {
+        $member = Member::with(['trainer.user', 'points', 'attendances'])->findOrFail($id);
+
+        return Inertia::render('admin/members/show', [
+            'member' => $member,
+            'flash'  => [
+                'success' => session('success'),
+                'error'   => session('error'),
+            ],
+        ]);
+    }
 }
