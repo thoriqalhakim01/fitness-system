@@ -12,6 +12,7 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/', [TrainerController::class, 'index'])->name('admin.trainers.index');
             Route::get('/create', [TrainerController::class, 'create'])->name('admin.trainers.create');
             Route::post('/create', [TrainerController::class, 'store'])->name('admin.trainers.store');
+            Route::get('/{id}', [TrainerController::class, 'show'])->name('admin.trainers.show');
         });
     });
 });

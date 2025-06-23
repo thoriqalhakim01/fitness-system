@@ -73,8 +73,28 @@ export interface Trainer {
 
     user: User;
     members?: Member[];
+    training_sessions?: TrainingSession[];
 }
 
 export interface Member {
     id: string;
+    rfid_uid: string;
+    name: string;
+    avatar: string;
+    email: string;
+    phone: string;
+    registration_date: string | null;
+    status: string;
+    is_member: boolean;
+
+    trainer: Trainer;
+    staff: User;
+}
+
+export interface TrainingSession {
+    id: string;
+    entry_timestamp: string;
+
+    staff?: User;
+    trainer?: Trainer;
 }

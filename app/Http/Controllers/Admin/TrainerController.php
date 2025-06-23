@@ -67,4 +67,17 @@ class TrainerController extends Controller
                 ->withInput();
         }
     }
+
+    public function show(string $id)
+    {
+        $trainer = Trainer::with(['user', 'members', 'trainingSessions'])->findOrFail($id);
+
+        return Inertia::render('admin/trainers/show', [
+            'trainer' => $trainer,
+            'flash'   => [
+                'success' => session('success'),
+                'error'   => session('error'),
+            ],
+        ]);
+    }
 }

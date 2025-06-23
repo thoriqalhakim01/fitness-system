@@ -83,7 +83,7 @@ export default function Trainers({ trainers, flash }: Props) {
                                 </TableCell>
                                 <TableCell className="flex justify-end">
                                     <Button variant={'ghost'} size={'icon'} asChild>
-                                        <Link href="">
+                                        <Link href={route('admin.trainers.show', item.id)}>
                                             <Eye />
                                         </Link>
                                     </Button>
