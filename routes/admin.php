@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/{id}', [TrainerController::class, 'show'])->name('admin.trainers.show');
             Route::get('/{id}/edit', [TrainerController::class, 'edit'])->name('admin.trainers.edit');
             Route::put('/{id}/edit', [TrainerController::class, 'update'])->name('admin.trainers.update');
+            Route::delete('/{id}', [TrainerController::class, 'destroy'])->name('admin.trainers.destroy');
         });
     });
 });

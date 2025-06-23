@@ -124,4 +124,29 @@ class TrainerController extends Controller
                 ->withInput();
         }
     }
+
+    public function destroy(string $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $trainer = Trainer::with(['user'])->findOrFail($id);
+
+            $trainer->user()->delete();
+
+            $trainer->delete();
+
+            DB::commit();
+
+            return redirect()->route('admin.trainers.index')->with('success', 'Trainer deleted successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Trainer deletion failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to delete trainer. Please try again.'])
+                ->withInput();
+        }
+    }
 }

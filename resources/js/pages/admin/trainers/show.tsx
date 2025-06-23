@@ -4,9 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { PencilLine, Trash2 } from 'lucide-react';
+import { PencilLine } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import DeleteTrainer from './_components/delete-trainer';
 import MembersListings from './_components/members';
 import TrainerDetails from './_components/trainer-details';
 import TrainingSessionTable from './_components/trainig-session';
@@ -31,8 +32,6 @@ type Props = {
 };
 
 export default function ShowTrainer({ trainer, flash }: Props) {
-    console.log(trainer);
-
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -53,10 +52,7 @@ export default function ShowTrainer({ trainer, flash }: Props) {
                                 <span className="hidden sm:block">Edit</span>
                             </Link>
                         </Button>
-                        <Button size={'sm'} variant={'destructive'}>
-                            <Trash2 />
-                            <span className="hidden sm:block">Delete</span>
-                        </Button>
+                        <DeleteTrainer id={trainer.id} />
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-4 lg:flex-row">
