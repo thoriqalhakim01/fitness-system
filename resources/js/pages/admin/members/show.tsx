@@ -3,10 +3,11 @@ import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import { Member, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { PencilLine, Trash2 } from 'lucide-react';
+import { PencilLine } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import AttendanceHistory from './_components/attendance-history';
+import DeleteMember from './_components/delete-member';
 import MemberDetails from './_components/member-details';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -49,12 +50,7 @@ export default function ShowMember({ member, flash }: Props) {
                                 <span className="hidden sm:block">Edit</span>
                             </Link>
                         </Button>
-                        <Button size={'sm'} variant={'destructive'} asChild>
-                            <Link href="">
-                                <Trash2 />
-                                <span className="hidden sm:block">Delete</span>
-                            </Link>
-                        </Button>
+                        <DeleteMember id={member.id} />
                     </div>
                 </div>
                 <div className="flex w-full flex-col gap-4 lg:flex-row">

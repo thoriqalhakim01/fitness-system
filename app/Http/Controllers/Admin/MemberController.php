@@ -148,4 +148,13 @@ class MemberController extends Controller
                 ->withInput();
         }
     }
+
+    public function destroy(string $id)
+    {
+        $member = Member::findOrFail($id);
+
+        $member->delete();
+
+        return redirect()->route('admin.members.index')->with('success', 'Member deleted successfully.');
+    }
 }
