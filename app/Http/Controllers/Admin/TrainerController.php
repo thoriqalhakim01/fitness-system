@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTrainerRequest;
 use App\Http\Requests\Admin\UpdateTrainerRequest;
+use App\Models\Attendance;
 use App\Models\Trainer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -71,11 +73,19 @@ class TrainerController extends Controller
 
     public function show(string $id)
     {
-        $trainer = Trainer::with(['user', 'members', 'trainingSessions'])->findOrFail($id);
+        $trainer = Trainer::with(['user', 'members', 'trainingSessions.members'])->findOrFail($id);
+
+        $today    = Carbon::today();
+        $todayEnd = Carbon::today()->endOfDay();
+
+        $allAttendances = Attendance::where('attendable_type', 'App\Models\Member')
+            ->whereIn('attendable_id', $trainer->members->pluck('id'))
+            ->get();
 
         return Inertia::render('admin/trainers/show', [
-            'trainer' => $trainer,
-            'flash'   => [
+            'trainer'        => $trainer,
+            'allAttendances' => $allAttendances,
+            'flash'          => [
                 'success' => session('success'),
                 'error'   => session('error'),
             ],

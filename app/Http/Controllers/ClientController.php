@@ -71,7 +71,7 @@ class ClientController extends Controller
             return $this->renderCheckInError("Member '{$rfidUid}' has already checked in today.");
         }
 
-        if (($member->points->balance ?? 0) <= 0) {
+        if (($member->points->points ?? 0) <= 0) {
             return $this->renderCheckInError("Member '{$rfidUid}' has no available points.");
         }
 
@@ -80,7 +80,7 @@ class ClientController extends Controller
         }
 
         DB::transaction(function () use ($member, $staffId) {
-            $member->points()->decrement('balance');
+            $member->points()->decrement('points');
             $member->attendances()->create([
                 'staff_id'        => $staffId,
                 'entry_timestamp' => now()->timezone('Asia/Jakarta'),

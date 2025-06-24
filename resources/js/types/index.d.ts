@@ -83,7 +83,7 @@ export interface Member {
     avatar: string;
     email: string;
     phone: string;
-    registration_date: string | null;
+    registration_date: string;
     status: string;
     is_member: boolean;
     created_at: string;
@@ -157,4 +157,16 @@ export interface Transaction {
     staff: User;
     member: Member;
     package: Package;
+}
+
+export interface TrainingSession {
+    id: string;
+    staff_id: string;
+    trainer_id: string;
+    entry_timestamp: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string | null;
+
+    members?: Member[];
 }

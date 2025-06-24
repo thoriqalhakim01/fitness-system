@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
-import { Trainer, type BreadcrumbItem } from '@/types';
+import { Attendance, Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { PencilLine } from 'lucide-react';
 import { useEffect } from 'react';
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import DeleteTrainer from './_components/delete-trainer';
 import MembersListings from './_components/members';
 import TrainerDetails from './_components/trainer-details';
-import TrainingSessionTable from './_components/trainig-session';
+import TrainingSessionTable from './_components/training-session';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,13 +25,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type Props = {
     trainer: Trainer;
+    allAttendances?: Attendance[];
     flash?: {
         success?: string;
         error?: string;
     };
 };
 
-export default function ShowTrainer({ trainer, flash }: Props) {
+export default function ShowTrainer({ trainer, allAttendances = [], flash }: Props) {
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -67,7 +68,7 @@ export default function ShowTrainer({ trainer, flash }: Props) {
                             <TabsTrigger value="members">List Members</TabsTrigger>
                         </TabsList>
                         <TabsContent value="session">
-                            <TrainingSessionTable lists={trainer.training_sessions || []} />
+                            <TrainingSessionTable lists={trainer.training_sessions || []} attendances={allAttendances} />
                         </TabsContent>
                         <TabsContent value="members">
                             <MembersListings lists={trainer.members || []} />
