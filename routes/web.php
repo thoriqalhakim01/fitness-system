@@ -19,6 +19,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:admin|staff')->group(function () {
         Route::get('/check-in', [ClientController::class, 'checkIn'])->name('client.check-in');
         Route::get('/check-data', [ClientController::class, 'checkData'])->name('client.check-data');
+        Route::get('/check-in/{rfid}', [ClientController::class, 'checkInHandler'])->name('client.check-in-handler');
+        Route::post('/training/start', [ClientController::class, 'startTraining'])->name('training.start');
     });
 });
 
