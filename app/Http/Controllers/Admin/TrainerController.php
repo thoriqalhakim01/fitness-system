@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 
 class TrainerController extends Controller
@@ -165,6 +166,45 @@ class TrainerController extends Controller
 
             return back()
                 ->withErrors(['error' => 'Failed to delete trainer. Please try again.'])
+                ->withInput();
+        }
+    }
+
+    public function editPassword(string $id)
+    {
+        $trainer = Trainer::with(['user'])->findOrFail($id);
+
+        return Inertia::render('admin/trainers/edit-password', [
+            'trainer' => $trainer,
+            'error'   => session('error'),
+        ]);
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $trainer = Trainer::with(['user'])->findOrFail($id);
+
+            $trainer->user()->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('admin.trainers.show', $trainer->id)->with('success', 'Trainer password updated successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Trainer password update failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to update trainer password. Please try again.'])
                 ->withInput();
         }
     }

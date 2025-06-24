@@ -19,6 +19,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::post('/create', [TrainerController::class, 'store'])->name('admin.trainers.store');
             Route::get('/{id}', [TrainerController::class, 'show'])->name('admin.trainers.show');
             Route::get('/{id}/edit', [TrainerController::class, 'edit'])->name('admin.trainers.edit');
+            Route::get('/{id}/edit-password', [TrainerController::class, 'editPassword'])->name('admin.trainers.edit-password');
+            Route::put('/{id}/edit-password', [TrainerController::class, 'updatePassword'])->name('admin.trainers.update-password');
             Route::put('/{id}/edit', [TrainerController::class, 'update'])->name('admin.trainers.update');
             Route::delete('/{id}', [TrainerController::class, 'destroy'])->name('admin.trainers.destroy');
         });

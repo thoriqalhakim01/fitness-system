@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
 import { Attendance, Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { PencilLine } from 'lucide-react';
+import { KeyRound, PencilLine } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import DeleteTrainer from './_components/delete-trainer';
@@ -47,6 +47,12 @@ export default function ShowTrainer({ trainer, allAttendances = [], flash }: Pro
                 <div className="flex items-start justify-between">
                     <h1 className="text-2xl font-bold">Trainers Details</h1>
                     <div className="flex items-center gap-2">
+                        <Button size={'sm'} variant={'outline'} asChild>
+                            <Link href={route('admin.trainers.update-password', trainer.id)}>
+                                <KeyRound />
+                                <span className="hidden sm:block">Change Password</span>
+                            </Link>
+                        </Button>
                         <Button size={'sm'} asChild>
                             <Link href={route('admin.trainers.edit', trainer.id)}>
                                 <PencilLine />
