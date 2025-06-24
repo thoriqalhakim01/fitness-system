@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\StoreMemberRequest;
 use App\Http\Requests\Admin\UpdateMemberRequest;
 use App\Models\Member;
 use App\Models\Trainer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -149,8 +150,16 @@ class MemberController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        if (! $request->user()) {
+            return back()->with('error', 'Password does not match.');
+        }
+
         $member = Member::findOrFail($id);
 
         $member->delete();

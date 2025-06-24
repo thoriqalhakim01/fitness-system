@@ -8,6 +8,7 @@ use App\Models\Attendance;
 use App\Models\Trainer;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -135,9 +136,17 @@ class TrainerController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         DB::beginTransaction();
+
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        if (! $request->user()) {
+            return back()->with('error', 'Password does not match.');
+        }
 
         try {
             $trainer = Trainer::with(['user'])->findOrFail($id);
