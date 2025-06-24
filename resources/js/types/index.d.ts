@@ -115,12 +115,18 @@ export interface Point {
 
 export interface Attendance {
     id: string;
+    attendable_id: string;
+    attendable_type: string;
     entry_timestamp: string;
     created_at: string;
     updated_at: string;
-    deleted_at: string | null;
+    deleted_at?: string | null;
 
-    staff: User;
+    attendable?: Member | Trainer;
+
+    staff?: User;
+
+    [key: string]: string | number | undefined | null;
 }
 
 export interface Package {

@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Attendance extends Model
@@ -12,7 +13,8 @@ class Attendance extends Model
 
     protected $fillable = [
         'staff_id',
-        'member_id',
+        'attendable_id',
+        'attendable_type',
         'entry_timestamp',
     ];
 
@@ -25,8 +27,8 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function member(): BelongsTo
+    public function attendable(): MorphTo
     {
-        return $this->belongsTo(Member::class);
+        return $this->morphTo();
     }
 }

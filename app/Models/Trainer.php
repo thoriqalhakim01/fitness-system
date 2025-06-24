@@ -32,6 +32,11 @@ class Trainer extends Model
         return $this->hasMany(Member::class);
     }
 
+    public function attendances()
+    {
+        return $this->morphMany(Attendance::class, 'attendable');
+    }
+
     public function trainingSessions()
     {
         return $this->hasMany(TrainingSession::class);

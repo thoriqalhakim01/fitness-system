@@ -51,7 +51,7 @@ class Member extends Model
 
     public function attendances()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->morphMany(Attendance::class, 'attendable');
     }
 
     public function trainingSessions(): BelongsToMany
