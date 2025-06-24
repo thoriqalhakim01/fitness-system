@@ -5,8 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import AppLayout from '@/layouts/app-layout';
 import { getFormatDate, getFormatTime, getStatusFromAttendableType } from '@/lib/helpers';
 import { Attendance, FilterParams, PaginatedResponse, type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Hash, PlusCircle } from 'lucide-react';
+import { Head, router } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight, Hash } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
@@ -49,15 +49,7 @@ export default function Attendances({ attendances, flash }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Attendances" />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Attendances History</h1>
-                    <Button size={'sm'} asChild>
-                        <Link href={route('admin.attendances.create')}>
-                            <PlusCircle />
-                            <span className="hidden sm:block">Add Attendance</span>
-                        </Link>
-                    </Button>
-                </div>
+                <h1 className="text-2xl font-bold">Attendances History</h1>
                 <Separator />
                 <Table>
                     <TableHeader>

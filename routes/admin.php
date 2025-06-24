@@ -50,8 +50,6 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/attendances')->group(function () {
             Route::get('/', [AttendanceController::class, 'index'])->name('admin.attendances.index');
-            Route::get('/create', [AttendanceController::class, 'create'])->name('admin.attendances.create');
-            Route::post('/create', [AttendanceController::class, 'store'])->name('admin.attendances.store');
         });
     });
 });
