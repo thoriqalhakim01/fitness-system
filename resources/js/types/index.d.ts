@@ -133,3 +133,22 @@ export interface Package {
     updated_at: string;
     deleted_at: string | null;
 }
+
+export interface Transaction {
+    id: string;
+    staff_id: string;
+    member_id: string;
+    package_id: string;
+    transaction_date: string;
+    amount: number;
+    points: number;
+    payment_method: string;
+    notes?: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+
+    staff: User;
+    member: Member;
+    package: Package;
+}

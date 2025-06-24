@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\TrainerController;
+use App\Http\Controllers\Admin\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
@@ -35,6 +36,15 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::post('/', [PackageController::class, 'store'])->name('admin.packages.store');
             Route::put('/{id}', [PackageController::class, 'update'])->name('admin.packages.update');
             Route::delete('/{id}', [PackageController::class, 'destroy'])->name('admin.packages.destroy');
+        });
+
+        Route::prefix('/transactions')->group(function () {
+            Route::get('/', [TransactionController::class, 'index'])->name('admin.transactions.index');
+            Route::get('/create', [TransactionController::class, 'create'])->name('admin.transactions.create');
+            Route::post('/create', [TransactionController::class, 'store'])->name('admin.transactions.store');
+            Route::get('/{id}/edit', [TransactionController::class, 'edit'])->name('admin.transactions.edit');
+            Route::put('/{id}/edit', [TransactionController::class, 'update'])->name('admin.transactions.update');
+            Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');
         });
     });
 });
