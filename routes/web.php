@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Trainer\MemberController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -8,11 +9,16 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified', 'role:trainer'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/trainer')->group(function () {
         Route::prefix('/members')->group(function () {
             Route::get('/', [MemberController::class, 'index'])->name('trainer.members.index');
         });
+    })->middleware('role:trainer');
+
+    Route::middleware('role:admin|staff')->group(function () {
+        Route::get('/check-in', [ClientController::class, 'checkIn'])->name('client.check-in');
+        Route::get('/check-data', [ClientController::class, 'checkData'])->name('client.check-data');
     });
 });
 
