@@ -3,13 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { getCurrencyFormat } from '@/lib/helpers';
+import { getCurrencyFormat, getFormatDate } from '@/lib/helpers';
 import { FilterParams, Transaction, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, PencilLine, PlusCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
+import DeleteTransaction from './_components/delete-transaction';
+import ShowTransaction from './_components/show-transaction';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -63,37 +65,41 @@ export default function Transactions({ transactions, flash }: Props) {
                     <TableHeader>
                         <TableRow>
                             <TableHead>
-                                <Hash size={16} />
+                                <Calendar size={16} />
                             </TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Package</TableHead>
                             <TableHead className="text-center">Amount</TableHead>
                             <TableHead className="text-center">Point Added</TableHead>
+                            <TableHead className="text-center">Payment Method</TableHead>
                             <TableHead className="text-right">Action</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {transactions.data.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell className="font-mono">{item.member.rfid_uid}</TableCell>
+                                <TableCell>{getFormatDate(item.transaction_date)}</TableCell>
                                 <TableCell>{item.member.name}</TableCell>
                                 <TableCell>{item.package.name}</TableCell>
                                 <TableCell className="text-center">{getCurrencyFormat(item.amount)}</TableCell>
                                 <TableCell className="text-center">
-                                    <Badge>{item.points}</Badge>
+                                    <Badge>{item.points ?? 0}</Badge>
                                 </TableCell>
-                                <TableCell className="flex justify-end">
-                                    <Button variant={'ghost'} size={'icon'} asChild>
-                                        <Link href="">
-                                            <Eye />
+                                <TableCell className="text-center">{item.payment_method}</TableCell>
+                                <TableCell className="flex items-center justify-end gap-2">
+                                    <ShowTransaction data={item} />
+                                    <Button size={'sm'} asChild>
+                                        <Link href={route('admin.transactions.edit', item.id)}>
+                                            <PencilLine />
                                         </Link>
                                     </Button>
+                                    <DeleteTransaction id={item.id} />
                                 </TableCell>
                             </TableRow>
                         ))}
                         {transactions.data.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={6} className="h-24 text-center">
+                                <TableCell colSpan={7} className="h-24 text-center">
                                     No transactions found.
                                 </TableCell>
                             </TableRow>

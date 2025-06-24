@@ -25,6 +25,11 @@ class Transaction extends Model
         'transaction_date' => 'datetime',
     ];
 
+    public function getPaymentMethodAttribute($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
+
     public function staff(): BelongsTo
     {
         return $this->belongsTo(User::class);

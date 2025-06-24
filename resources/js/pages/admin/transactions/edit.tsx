@@ -37,7 +37,7 @@ export default function EditTransaction({ transaction, members, options, error }
             <Head title="Transactions" />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Record a Transaction</h1>
+                    <h1 className="text-2xl font-bold">Modify Transaction</h1>
                     <Button size={'sm'} variant={'outline'} asChild>
                         <Link href={route('admin.transactions.index')}>
                             <X />

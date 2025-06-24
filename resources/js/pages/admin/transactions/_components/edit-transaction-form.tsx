@@ -46,7 +46,7 @@ export default function EditTransactionForm({ members, options, transaction }: P
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        put(route('admin.transactions.store', transaction.id), {
+        put(route('admin.transactions.update', transaction.id), {
             preserveScroll: true,
             onSuccess: () => reset(),
         });
@@ -205,7 +205,7 @@ export default function EditTransactionForm({ members, options, transaction }: P
 
             <Button type="submit" className="mt-2 w-full" tabIndex={8} disabled={processing}>
                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                Create New
+                Save changes
             </Button>
         </form>
     );
