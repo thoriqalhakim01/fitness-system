@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\TransactionController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,17 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/attendances')->group(function () {
             Route::get('/', [AttendanceController::class, 'index'])->name('admin.attendances.index');
+        });
+
+        Route::prefix('/staffs')->group(function () {
+            Route::get('/', [StaffController::class, 'index'])->name('admin.staffs.index');
+            Route::get('/create', [StaffController::class, 'create'])->name('admin.staffs.create');
+            Route::post('/create', [StaffController::class, 'store'])->name('admin.staffs.store');
+            Route::get('/{id}/edit', [StaffController::class, 'edit'])->name('admin.staffs.edit');
+            Route::put('/{id}/edit', [StaffController::class, 'update'])->name('admin.staffs.update');
+            Route::get('/{id}/edit-password', [StaffController::class, 'editPassword'])->name('admin.staffs.edit-password');
+            Route::put('/{id}/edit-password', [StaffController::class, 'updatePassword'])->name('admin.staffs.update-password');
+            Route::delete('/{id}', [StaffController::class, 'destroy'])->name('admin.staffs.destroy');
         });
     });
 });
