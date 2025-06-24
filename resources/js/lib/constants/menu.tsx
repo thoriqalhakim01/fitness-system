@@ -1,5 +1,5 @@
 import { NavItem } from '@/types';
-import { ArrowLeftRight, ChartSpline, Dumbbell, LayoutGrid, MonitorCheck, MonitorCog, MonitorSmartphone, SquareLibrary, Users } from 'lucide-react';
+import { AlarmClockCheck, ArrowLeftRight, ChartSpline, Dumbbell, LayoutGrid, MonitorCheck, MonitorCog, MonitorSmartphone, SquareLibrary, Users } from 'lucide-react';
 
 export const adminNavItems: NavItem[] = [
     {
@@ -20,7 +20,7 @@ export const adminNavItems: NavItem[] = [
     {
         title: 'Attendance History',
         href: '/dashboard/attendances',
-        icon: Users,
+        icon: AlarmClockCheck,
     },
     {
         title: 'Packages',
@@ -37,11 +37,11 @@ export const adminNavItems: NavItem[] = [
         href: '/dashboard/staffs',
         icon: MonitorCog,
     },
-    {
-        title: 'Report & Analytics',
-        href: '/dashboard/report-analytics',
-        icon: ChartSpline,
-    },
+    // {
+    //     title: 'Report & Analytics',
+    //     href: '/dashboard/report-analytics',
+    //     icon: ChartSpline,
+    // },
 ];
 
 export const trainerNavItems: NavItem[] = [
