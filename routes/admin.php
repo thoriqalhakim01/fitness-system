@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\PackageController;
@@ -45,6 +46,12 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/{id}/edit', [TransactionController::class, 'edit'])->name('admin.transactions.edit');
             Route::put('/{id}/edit', [TransactionController::class, 'update'])->name('admin.transactions.update');
             Route::delete('/{id}', [TransactionController::class, 'destroy'])->name('admin.transactions.destroy');
+        });
+
+        Route::prefix('/attendances')->group(function () {
+            Route::get('/', [AttendanceController::class, 'index'])->name('admin.attendances.index');
+            Route::get('/create', [AttendanceController::class, 'create'])->name('admin.attendances.create');
+            Route::post('/create', [AttendanceController::class, 'store'])->name('admin.attendances.store');
         });
     });
 });
