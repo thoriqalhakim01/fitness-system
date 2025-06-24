@@ -1,7 +1,9 @@
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import { getFormatDate, getFormatTime, getStatusFromAttendableType } from '@/lib/helpers';
 import { Attendance, FilterParams, PaginatedResponse, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight, Hash, PlusCircle } from 'lucide-react';
@@ -24,6 +26,7 @@ type Props = {
 };
 
 export default function Attendances({ attendances, flash }: Props) {
+    console.log(attendances);
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -69,6 +72,17 @@ export default function Attendances({ attendances, flash }: Props) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
+                        {attendances.data.map((attendance, index) => (
+                            <TableRow key={attendance.id}>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{attendance.attendable?.name}</TableCell>
+                                <TableCell>
+                                    <Badge>{getStatusFromAttendableType(attendance.attendable_type)}</Badge>
+                                </TableCell>
+                                <TableCell className="text-center">{getFormatDate(attendance.entry_timestamp)}</TableCell>
+                                <TableCell className="text-center">{getFormatTime(attendance.entry_timestamp)}</TableCell>
+                            </TableRow>
+                        ))}
                         {attendances.data.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={5} className="h-24 text-center">

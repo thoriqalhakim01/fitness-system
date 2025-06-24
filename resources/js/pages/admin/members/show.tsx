@@ -59,7 +59,8 @@ export default function ShowMember({ member, flash }: Props) {
                     </div>
                     <Separator orientation="vertical" className="hidden lg:block" />
                     <Separator className="block lg:hidden" />
-                    <div className="flex w-full flex-col">
+                    <div className="flex w-full flex-col gap-2">
+                        <h2 className="text-lg font-medium">Attendance History</h2>
                         <AttendanceHistory lists={member.attendances || []} />
                     </div>
                 </div>

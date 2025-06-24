@@ -67,6 +67,7 @@ export interface User {
 export interface Trainer {
     id: string;
     rfid_uid: string;
+    name: string;
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
@@ -126,7 +127,7 @@ export interface Attendance {
 
     staff?: User;
 
-    [key: string]: string | number | undefined | null;
+    [key: string]: string | number | null;
 }
 
 export interface Package {

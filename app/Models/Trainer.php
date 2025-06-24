@@ -15,6 +15,7 @@ class Trainer extends Model
         'staff_id',
         'user_id',
         'rfid_uid',
+        'name',
     ];
 
     public function staff(): BelongsTo

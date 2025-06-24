@@ -11,7 +11,7 @@ class AttendanceController extends Controller
 {
     public function index()
     {
-        $query = Attendance::query();
+        $query = Attendance::query()->with('attendable')->orderBy('entry_timestamp', 'desc');
 
         $attendances = $query->paginate(20);
 
