@@ -19,21 +19,4 @@ class AttendanceController extends Controller
             'attendances' => $attendances,
         ]);
     }
-
-    public function create()
-    {
-        $members = Member::select('id', 'name', 'is_member')->get();
-
-        return Inertia::render('admin/attendances/create', [
-            'members' => $members,
-            'error'   => session('error'),
-        ]);
-    }
-
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            //
-        ]);
-    }
 }
