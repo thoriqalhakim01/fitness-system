@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import AttendanceHistory from './_components/attendance-history';
 import DeleteMember from './_components/delete-member';
 import MemberDetails from './_components/member-details';
+import ChangeStatus from './_components/change-status';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -44,6 +45,7 @@ export default function ShowMember({ member, flash }: Props) {
                 <div className="flex items-start justify-between">
                     <h1 className="text-2xl font-bold">Members Details</h1>
                     <div className="flex items-center gap-2">
+                        <ChangeStatus member={member}/>
                         <Button size={'sm'} asChild>
                             <Link href={route('admin.members.edit', member.id)}>
                                 <PencilLine />

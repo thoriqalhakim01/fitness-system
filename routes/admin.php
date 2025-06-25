@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
             Route::get('/{id}/edit', [MemberController::class, 'edit'])->name('admin.members.edit');
             Route::put('/{id}/edit', [MemberController::class, 'update'])->name('admin.members.update');
             Route::delete('/{id}', [MemberController::class, 'destroy'])->name('admin.members.destroy');
+            Route::put('/{id}', [MemberController::class, 'changeStatus'])->name('admin.members.change-status');
         });
 
         Route::prefix('/packages')->group(function () {

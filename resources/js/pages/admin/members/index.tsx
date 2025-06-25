@@ -68,6 +68,7 @@ export default function Members({ members, flash }: Props) {
                             <TableHead>Email</TableHead>
                             <TableHead>Phone number</TableHead>
                             <TableHead>Trainer</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead className="text-center">Points</TableHead>
                             <TableHead className="text-right">Action</TableHead>
                         </TableRow>
@@ -80,6 +81,26 @@ export default function Members({ members, flash }: Props) {
                                 <TableCell>{item.email}</TableCell>
                                 <TableCell>{item.phone}</TableCell>
                                 <TableCell>{item.trainer.user.name}</TableCell>
+                                <TableCell className="flex items-center gap-1">
+                                    {item.is_member ? (
+                                        <Badge variant="default" className="border-green-200 bg-green-100 text-green-800">
+                                            Active Member
+                                        </Badge>
+                                    ) : (
+                                        <Badge variant="secondary" className="border-red-200 bg-red-100 text-red-800">
+                                            Non-member
+                                        </Badge>
+                                    )}
+                                    {item.status === 'active' ? (
+                                        <Badge variant="default" className="border-green-200 bg-green-100 text-green-800">
+                                            Active
+                                        </Badge>
+                                    ) : (
+                                        <Badge variant="secondary" className="border-red-200 bg-red-100 text-red-800">
+                                            Inactive
+                                        </Badge>
+                                    )}
+                                </TableCell>
                                 <TableCell className="text-center">
                                     <Badge>{item.points?.points}</Badge>
                                 </TableCell>

@@ -6,9 +6,11 @@ use App\Http\Requests\Admin\StoreMemberRequest;
 use App\Http\Requests\Admin\UpdateMemberRequest;
 use App\Models\Member;
 use App\Models\Trainer;
+use App\Rules\UniqueRfidAcrossTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class MemberController extends Controller
@@ -165,5 +167,57 @@ class MemberController extends Controller
         $member->delete();
 
         return redirect()->route('admin.members.index')->with('success', 'Member deleted successfully.');
+    }
+
+    public function changeStatus(Request $request, string $id)
+    {
+        $request->validate([
+            'staff_id'  => 'required|exists:users,id',
+            'is_member' => 'required|boolean',
+            'status'    => 'required|string|in:active,inactive',
+            'rfid_uid'  => [
+                'required_if:is_member,true',
+                Rule::unique('members', 'rfid_uid')->ignore($id),
+                new UniqueRfidAcrossTables('members', $id),
+            ],
+        ]);
+
+        DB::beginTransaction();
+
+        $isMember = isset($request->is_member) && $request->is_member === '1';
+
+        try {
+            $member = Member::findOrFail($id);
+
+            $member->update([
+                'staff_id'  => $request->staff_id,
+                'rfid_uid'  => $isMember ? $request->rfid_uid : null,
+                'is_member' => $isMember,
+                'status'    => $request->status,
+            ]);
+
+            if ($isMember && ! $member->points) {
+                $member->points()->create([
+                    'balance'    => 0,
+                    'expires_at' => now()->timezone('Asia/Jakarta'),
+                ]);
+            }
+
+            if (! $isMember && $member->points) {
+                $member->points()->delete();
+            }
+
+            DB::commit();
+
+            return redirect()->route('admin.members.show', $id)->with('success', 'Member status changed successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('Member change status failed: ' . $th->getMessage());
+
+            return back()
+                ->withErrors(['error' => 'Failed to change status member. Please try again.'])
+                ->withInput();
+        }
     }
 }
