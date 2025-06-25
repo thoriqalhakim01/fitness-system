@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(
-            Auth::user()->hasRole('trainer') ? route('trainer.members.index') : route('admin.dashboard.index')
+            Auth::user()->hasRole('trainer') ? route('trainer.dashboard') : route('admin.dashboard.index')
         );
     }
 

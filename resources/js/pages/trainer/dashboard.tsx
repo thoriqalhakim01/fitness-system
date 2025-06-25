@@ -29,7 +29,7 @@ export default function Dashboard({ trainer, allAttendances = [] }: Props) {
                         <div className="flex items-center justify-between gap-4">
                             <h1 className="text-lg font-medium">Manage Members</h1>
                             <Button size={'sm'} asChild>
-                                <Link href={''}>
+                                <Link href={route('trainer.new-member')}>
                                     <Plus />
                                     <span className="hidden sm:block">Enroll New Member</span>
                                 </Link>

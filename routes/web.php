@@ -12,6 +12,9 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:trainer')->group(function () {
         Route::get('/trainer/dashboard', [TrainerDashboardController::class, 'index'])->name('trainer.dashboard');
+        Route::get('/trainer/new-member', [TrainerDashboardController::class, 'newMember'])->name('trainer.new-member');
+        Route::post('/trainer/new-member', [TrainerDashboardController::class, 'handleNewMember'])->name('trainer.handle-new-member');
+        Route::get('/trainer/member/{id}', [TrainerDashboardController::class, 'showMember'])->name('trainer.show-member');
     });
 
     Route::middleware('role:admin|staff')->group(function () {
