@@ -54,7 +54,7 @@ export default function Attendances({ attendances, flash }: Props) {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>
+                            <TableHead className="w-36">
                                 <Hash size={16} />
                             </TableHead>
                             <TableHead>Name</TableHead>
@@ -64,9 +64,9 @@ export default function Attendances({ attendances, flash }: Props) {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {attendances.data.map((attendance, index) => (
+                        {attendances.data.map((attendance) => (
                             <TableRow key={attendance.id}>
-                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>{attendance.attendable?.rfid_uid}</TableCell>
                                 <TableCell>{attendance.attendable?.name}</TableCell>
                                 <TableCell>
                                     <Badge>{getStatusFromAttendableType(attendance.attendable_type)}</Badge>
