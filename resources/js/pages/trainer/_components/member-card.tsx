@@ -8,7 +8,7 @@ type Props = {
 
 export default function MemberCard({ data }: Props) {
     return (
-        <Link href="" className="transition-all duration-300 ease-in-out hover:scale-105">
+        <Link href={route('trainer.show-member', data.id)} className="transition-all duration-300 ease-in-out hover:scale-105">
             <div className="flex flex-col rounded-xl border bg-card p-4 text-card-foreground shadow-sm">
                 <div className="flex h-36 flex-col items-center justify-center gap-2 pb-4">
                     <div className="flex h-24 w-24 items-center justify-center rounded-full bg-muted">

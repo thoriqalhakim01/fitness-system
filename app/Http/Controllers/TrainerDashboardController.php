@@ -65,7 +65,9 @@ class TrainerDashboardController extends Controller
     {
         $user = Auth::user();
 
-        $member = Member::with(['trainer.user', 'attendances'])->where('trainer_id', $user->id)->findOrFail($id);
+        $trainerId = Trainer::where('user_id', $user->id)->first()->id;
+
+        $member = Member::with(['trainer.user', 'attendances'])->where('trainer_id', $trainerId)->findOrFail($id);
 
         return Inertia::render('trainer/members/show-member', [
             'member' => $member,
