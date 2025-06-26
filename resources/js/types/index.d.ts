@@ -85,6 +85,9 @@ export interface Member {
     avatar: string;
     email: string;
     phone: string;
+    birthdate: string;
+    weight: number;
+    height: number;
     registration_date: string;
     status: string;
     is_member: boolean;

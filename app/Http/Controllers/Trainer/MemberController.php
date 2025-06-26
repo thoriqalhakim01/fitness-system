@@ -25,6 +25,8 @@ class MemberController extends Controller
             'email'             => 'required|string|lowercase|email|max:255|unique:members,email',
             'phone'             => 'required|string|max:255',
             'registration_date' => 'required|date',
+            'weight'            => 'nullable|numeric|min:0',
+            'height'            => 'nullable|numeric|min:0',
         ]);
 
         $trainerId = Trainer::where('user_id', Auth::id())->first()->id;
@@ -34,6 +36,8 @@ class MemberController extends Controller
             'name'              => $validated['name'],
             'email'             => $validated['email'],
             'phone'             => $validated['phone'],
+            'weight'            => $validated['weight'],
+            'height'            => $validated['height'],
             'registration_date' => $validated['registration_date'],
             'is_member'         => false,
             'status'            => 'inactive',

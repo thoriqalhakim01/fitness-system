@@ -34,6 +34,9 @@ class UpdateMemberRequest extends FormRequest
                 Rule::unique('members', 'email')->ignore($id),
             ],
             'phone'             => 'required|numeric|min:3',
+            'birthdate'         => 'required|date',
+            'weight'            => 'nullable|numeric|min:0',
+            'height'            => 'nullable|numeric|min:0',
             'registration_date' => 'required|date',
             'is_member'         => 'required|boolean',
             'rfid_uid'          => [

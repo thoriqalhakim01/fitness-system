@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Separator } from '@/components/ui/separator';
+import { getAge } from '@/lib/helpers';
 import { Member } from '@/types';
 import { ChevronsUpDown, Dot } from 'lucide-react';
 import { useState } from 'react';
@@ -39,6 +40,18 @@ export default function MemberDetails({ member }: Props) {
             </div>
             <Separator />
             <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="font-medium">Age:</span>
+                    <span>{getAge(member.birthdate)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="font-medium">Weight:</span>
+                    <span>{member.weight} kg</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="font-medium">Height:</span>
+                    <span>{member.height} cm</span>
+                </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Email:</span>
                     <span>{member.email}</span>

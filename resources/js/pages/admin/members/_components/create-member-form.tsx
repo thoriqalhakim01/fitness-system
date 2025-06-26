@@ -23,6 +23,9 @@ type CreateForm = {
     name: string;
     email: string;
     phone: string;
+    birthdate: string;
+    weight: number | '';
+    height: number | '';
     registration_date: string;
     is_member: string;
 };
@@ -37,6 +40,9 @@ export default function CreateMemberForm({ trainers }: Props) {
         name: '',
         email: '',
         phone: '',
+        birthdate: '',
+        weight: '',
+        height: '',
         registration_date: new Date().toISOString().split('T')[0],
         is_member: '',
     });
@@ -136,6 +142,38 @@ export default function CreateMemberForm({ trainers }: Props) {
             </div>
 
             <div className="grid gap-1">
+                <Label htmlFor="birthdate">Birthdate</Label>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            id="birthdate"
+                            tabIndex={5}
+                            variant={'outline'}
+                            className={cn('w-full pl-3 text-left font-normal', !data.birthdate && 'text-muted-foreground')}
+                            type="button"
+                        >
+                            {data.birthdate ? format(new Date(data.birthdate), 'PPP') : <span>Pick a date</span>}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <Calendar
+                            mode="single"
+                            selected={new Date(data.birthdate)}
+                            onSelect={(date) => {
+                                if (date) {
+                                    setData('birthdate', format(date, 'yyyy-MM-dd'));
+                                }
+                            }}
+                            disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                            captionLayout="dropdown"
+                        />
+                    </PopoverContent>
+                </Popover>
+                <InputError message={errors.birthdate} className="mt-2" />
+            </div>
+
+            <div className="grid gap-1">
                 <Label htmlFor="trainer_id">Trainers</Label>
                 <Select
                     name="trainer_id"
@@ -160,6 +198,45 @@ export default function CreateMemberForm({ trainers }: Props) {
                 <InputError message={errors.trainer_id} className="mt-2" />
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-1">
+                    <Label htmlFor="weight">Weight</Label>
+                    <div className="relative">
+                        <Input
+                            id="weight"
+                            type="tel"
+                            tabIndex={6}
+                            value={data.weight}
+                            onChange={(e) => setData('weight', parseFloat(e.target.value) || 0)}
+                            disabled={processing}
+                            placeholder="e.g. 80"
+                        />
+                        <div className="absolute top-0 right-0 flex h-9 items-center border-l px-2">
+                            <p className="text-sm text-muted-foreground">kg</p>
+                        </div>
+                    </div>
+                    <InputError message={errors.weight} className="mt-2" />
+                </div>
+                <div className="grid gap-1">
+                    <Label htmlFor="height">Height</Label>
+                    <div className="relative">
+                        <Input
+                            id="height"
+                            type="string"
+                            tabIndex={7}
+                            value={data.height}
+                            onChange={(e) => setData('height', parseFloat(e.target.value) || 0)}
+                            disabled={processing}
+                            placeholder="e.g. 170"
+                        />
+                        <div className="absolute top-0 right-0 flex h-9 items-center border-l px-2">
+                            <p className="text-sm text-muted-foreground">cm</p>
+                        </div>
+                    </div>
+                    <InputError message={errors.height} className="mt-2" />
+                </div>
+            </div>
+
             <div className="grid gap-1">
                 <Label htmlFor="is_member">Membership Status</Label>
                 <Select
@@ -173,7 +250,7 @@ export default function CreateMemberForm({ trainers }: Props) {
                     }}
                     disabled={processing}
                 >
-                    <SelectTrigger id="is_member" tabIndex={5}>
+                    <SelectTrigger id="is_member" tabIndex={8}>
                         <SelectValue placeholder="Select membership status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -191,7 +268,7 @@ export default function CreateMemberForm({ trainers }: Props) {
                         id="rfid_uid"
                         type="text"
                         required={isActiveMember}
-                        tabIndex={6}
+                        tabIndex={9}
                         value={data.rfid_uid}
                         onChange={(e) => setData('rfid_uid', e.target.value)}
                         disabled={processing}
@@ -200,7 +277,7 @@ export default function CreateMemberForm({ trainers }: Props) {
                     <InputError message={errors.rfid_uid} className="mt-2" />
                 </div>
             )}
-            <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+            <Button type="submit" className="mt-2 w-full" tabIndex={10} disabled={processing}>
                 {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                 Create New
             </Button>

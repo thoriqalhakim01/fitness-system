@@ -27,6 +27,9 @@ class StoreMemberRequest extends FormRequest
             'name'              => 'required|string',
             'email'             => 'required|email|unique:members,email',
             'phone'             => 'required|numeric|min:3',
+            'birthdate'         => 'required|date',
+            'weight'            => 'nullable|numeric|min:0',
+            'height'            => 'nullable|numeric|min:0',
             'registration_date' => 'required|date',
             'is_member'         => 'required|boolean',
             'rfid_uid'          => [

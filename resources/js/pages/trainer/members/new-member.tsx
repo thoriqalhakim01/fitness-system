@@ -21,6 +21,8 @@ type CreateForm = {
     email: string;
     phone: string;
     registration_date: string;
+    weight: number | '';
+    height: number | '';
 };
 
 export default function CreateTrainer({ error }: Props) {
@@ -35,6 +37,8 @@ export default function CreateTrainer({ error }: Props) {
         email: '',
         phone: '',
         registration_date: new Date().toISOString().split('T')[0],
+        weight: '',
+        height: '',
     });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -140,6 +144,44 @@ export default function CreateTrainer({ error }: Props) {
                                 </PopoverContent>
                             </Popover>
                             <InputError message={errors.registration_date} className="mt-2" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-1">
+                                <Label htmlFor="weight">Weight</Label>
+                                <div className="relative">
+                                    <Input
+                                        id="weight"
+                                        type="tel"
+                                        tabIndex={6}
+                                        value={data.weight}
+                                        onChange={(e) => setData('weight', parseFloat(e.target.value) || 0)}
+                                        disabled={processing}
+                                        placeholder="e.g. 80"
+                                    />
+                                    <div className="absolute top-0 right-0 flex h-9 items-center border-l px-2">
+                                        <p className="text-sm text-muted-foreground">kg</p>
+                                    </div>
+                                </div>
+                                <InputError message={errors.weight} className="mt-2" />
+                            </div>
+                            <div className="grid gap-1">
+                                <Label htmlFor="height">Height</Label>
+                                <div className="relative">
+                                    <Input
+                                        id="height"
+                                        type="string"
+                                        tabIndex={7}
+                                        value={data.height}
+                                        onChange={(e) => setData('height', parseFloat(e.target.value) || 0)}
+                                        disabled={processing}
+                                        placeholder="e.g. 170"
+                                    />
+                                    <div className="absolute top-0 right-0 flex h-9 items-center border-l px-2">
+                                        <p className="text-sm text-muted-foreground">cm</p>
+                                    </div>
+                                </div>
+                                <InputError message={errors.height} className="mt-2" />
+                            </div>
                         </div>
                         <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}

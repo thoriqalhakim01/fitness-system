@@ -56,6 +56,9 @@ class MemberController extends Controller
                 'name'              => $validated['name'],
                 'email'             => $validated['email'],
                 'phone'             => $validated['phone'],
+                'birthdate'         => $validated['birthdate'],
+                'weight'            => $validated['weight'],
+                'height'            => $validated['height'],
                 'registration_date' => $validated['registration_date'],
                 'is_member'         => $isMember,
             ]);
@@ -123,6 +126,9 @@ class MemberController extends Controller
                 'name'              => $validated['name'],
                 'email'             => $validated['email'],
                 'phone'             => $validated['phone'],
+                'birthdate'         => $validated['birthdate'],
+                'weight'            => $validated['weight'],
+                'height'            => $validated['height'],
                 'registration_date' => $validated['registration_date'],
                 'is_member'         => $isMember,
             ]);
