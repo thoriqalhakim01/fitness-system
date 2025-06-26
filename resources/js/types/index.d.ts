@@ -75,6 +75,7 @@ export interface Trainer {
     user: User;
     members?: Member[];
     training_sessions?: TrainingSession[];
+    certifications?: Certification[];
 }
 
 export interface Member {
@@ -95,6 +96,7 @@ export interface Member {
     staff: User;
     points: Point;
     attendances: Attendance[];
+    logs: MemberLog[];
 }
 
 export interface TrainingSession {
@@ -170,4 +172,36 @@ export interface TrainingSession {
     deleted_at?: string | null;
 
     members?: Member[];
+}
+
+export interface Certification {
+    id: string;
+    trainer_id: string;
+    name: string;
+    image: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string | null;
+
+    trainer: Trainer;
+}
+
+export interface MemberLog {
+    id: string;
+    member_id: string;
+    trainer_id: string;
+    log_date: string;
+    notes?: string;
+    exercises?: Exercise[];
+    weight?: number;
+    progress_notes?: string;
+    created_at: string;
+    trainer: Trainer;
+}
+
+export interface Exercise {
+    name: string;
+    sets: number;
+    reps: number;
+    weight?: number;
 }

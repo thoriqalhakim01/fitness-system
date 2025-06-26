@@ -60,4 +60,9 @@ class Member extends Model
             ->withTimestamps()
             ->withTrashed();
     }
+
+    public function logs()
+    {
+        return $this->hasMany(MemberLog::class);
+    }
 }

@@ -12,7 +12,24 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
     const isOpen = usePage<SharedData>().props.sidebarOpen;
 
     if (variant === 'header') {
-        return <div className="flex min-h-screen w-full flex-col">{children}</div>;
+        return (
+            <div className="flex min-h-screen w-full flex-col">
+                {children}
+                <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick={false}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                    transition={Bounce}
+                />
+            </div>
+        );
     }
 
     return (
