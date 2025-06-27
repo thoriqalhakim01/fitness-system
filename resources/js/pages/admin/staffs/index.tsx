@@ -17,6 +17,8 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 import DeleteStaff from './_components/delete-staff';
+import { usePagination } from '@/hooks/use-pagination';
+import { Pagination } from '@/components/pagination';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -50,16 +52,10 @@ export default function Staffs({ staffs, flash }: Props) {
         }
     }, [flash]);
 
-    const handlePageChange = (page: number) => {
-        const params: FilterParams = {
-            page,
-        };
-
-        router.get(route('admin.staffs.index'), params, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
+    const { handlePageChange } = usePagination({
+        route: 'admin.staffs.index',
+        preserveFilters: true,
+    });
 
     const openDeleteDialog = (staffId: string) => {
         setDeleteDialog({
@@ -153,43 +149,10 @@ export default function Staffs({ staffs, flash }: Props) {
                     </TableBody>
                 </Table>
 
-                {staffs.total > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {staffs.from} to {staffs.to} of {staffs.total} results
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(staffs.current_page - 1)}
-                                disabled={staffs.current_page === 1}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <div className="flex items-center space-x-1">
-                                {Array.from({ length: staffs.last_page }, (_, i) => i + 1).map((page) => (
-                                    <Button
-                                        key={page}
-                                        variant={page === staffs.current_page ? 'default' : 'outline'}
-                                        size="icon"
-                                        onClick={() => handlePageChange(page)}
-                                    >
-                                        {page}
-                                    </Button>
-                                ))}
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(staffs.current_page + 1)}
-                                disabled={staffs.current_page === staffs.last_page}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <Pagination
+                    data={staffs}
+                    onPageChange={handlePageChange}
+                />
 
                 {deleteDialog.staffId && <DeleteStaff id={deleteDialog.staffId} isOpen={deleteDialog.isOpen} onClose={closeDeleteDialog} />}
             </div>

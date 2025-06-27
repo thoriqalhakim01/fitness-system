@@ -1,13 +1,15 @@
+import { Pagination } from '@/components/pagination';
 import { SearchBar } from '@/components/search-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { getCurrencyFormat, getFormatDate } from '@/lib/helpers';
 import { FilterParams, Transaction, type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, ChevronLeft, ChevronRight, PencilLine, PlusCircle } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { Calendar, PencilLine, PlusCircle } from 'lucide-react';
 import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
@@ -44,19 +46,15 @@ export default function Transactions({ transactions, flash, filters: initialFilt
         }
     }, [flash]);
 
-    const handlePageChange = (page: number) => {
-        const params: FilterParams = {
-            page,
+    const { handlePageChange } = usePagination({
+        route: 'admin.transactions.index',
+        preserveFilters: true,
+        filters: {
             search: searchTerm,
             start_date: filters.startDate,
             end_date: filters.endDate,
-        };
-
-        router.get(route('admin.transactions.index'), params, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
+        },
+    });
 
     const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -138,43 +136,7 @@ export default function Transactions({ transactions, flash, filters: initialFilt
                         )}
                     </TableBody>
                 </Table>
-                {transactions.total > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {transactions.from} to {transactions.to} of {transactions.total} results
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(transactions.current_page - 1)}
-                                disabled={transactions.current_page === 1}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <div className="flex items-center space-x-1">
-                                {Array.from({ length: transactions.last_page }, (_, i) => i + 1).map((page) => (
-                                    <Button
-                                        key={page}
-                                        variant={page === transactions.current_page ? 'default' : 'outline'}
-                                        size="icon"
-                                        onClick={() => handlePageChange(page)}
-                                    >
-                                        {page}
-                                    </Button>
-                                ))}
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(transactions.current_page + 1)}
-                                disabled={transactions.current_page === transactions.last_page}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <Pagination data={transactions} onPageChange={handlePageChange} />
             </div>
         </AppLayout>
     );

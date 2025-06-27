@@ -1,17 +1,19 @@
+import { Pagination } from '@/components/pagination';
+import { SearchBar } from '@/components/search-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Member, type BreadcrumbItem } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { Eye, Hash, PlusCircle } from 'lucide-react';
 import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 import { FilterDropdown } from './_components/filter-dropdown';
 import { useFilters } from './_hooks/useFilters';
-import { SearchBar } from '@/components/search-bar';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -41,21 +43,17 @@ export default function Members({ members, flash, filters: initialFilters }: Pro
         }
     }, [flash]);
 
-    const handlePageChange = (page: number) => {
-        const params: FilterParams = {
-            page,
+    const { handlePageChange } = usePagination({
+        route: 'admin.members.index',
+        preserveFilters: true,
+        filters: {
             search: searchTerm,
             status: filters.status,
             type: filters.type,
             start_date: filters.startDate,
             end_date: filters.endDate,
-        };
-
-        router.get(route('admin.members.index'), params, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
+        },
+    });
 
     const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -156,43 +154,7 @@ export default function Members({ members, flash, filters: initialFilters }: Pro
                         )}
                     </TableBody>
                 </Table>
-                {members.total > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {members.from} to {members.to} of {members.total} results
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(members.current_page - 1)}
-                                disabled={members.current_page === 1}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <div className="flex items-center space-x-1">
-                                {Array.from({ length: members.last_page }, (_, i) => i + 1).map((page) => (
-                                    <Button
-                                        key={page}
-                                        variant={page === members.current_page ? 'default' : 'outline'}
-                                        size="icon"
-                                        onClick={() => handlePageChange(page)}
-                                    >
-                                        {page}
-                                    </Button>
-                                ))}
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(members.current_page + 1)}
-                                disabled={members.current_page === members.last_page}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <Pagination data={members} onPageChange={handlePageChange} />
             </div>
         </AppLayout>
     );

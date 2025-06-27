@@ -1,12 +1,14 @@
+import { Pagination } from '@/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle, Search } from 'lucide-react';
+import { Eye, Hash, PlusCircle, Search } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
@@ -49,16 +51,11 @@ export default function Trainers({ trainers, flash, filters }: Props) {
         });
     };
 
-    const handlePageChange = (page: number) => {
-        const params: FilterParams = {
-            page,
-        };
-
-        router.get(route('admin.trainers.index'), params, {
-            preserveState: true,
-            preserveScroll: true,
-        });
-    };
+    const { handlePageChange } = usePagination({
+        route: 'admin.trainers.index',
+        preserveFilters: true,
+        filters: { search: searchTerm },
+    });
 
     const handleSearch = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -133,43 +130,7 @@ export default function Trainers({ trainers, flash, filters }: Props) {
                         )}
                     </TableBody>
                 </Table>
-                {trainers.total > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {trainers.from} to {trainers.to} of {trainers.total} results
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(trainers.current_page - 1)}
-                                disabled={trainers.current_page === 1}
-                            >
-                                <ChevronLeft className="h-4 w-4" />
-                            </Button>
-                            <div className="flex items-center space-x-1">
-                                {Array.from({ length: trainers.last_page }, (_, i) => i + 1).map((page) => (
-                                    <Button
-                                        key={page}
-                                        variant={page === trainers.current_page ? 'default' : 'outline'}
-                                        size="icon"
-                                        onClick={() => handlePageChange(page)}
-                                    >
-                                        {page}
-                                    </Button>
-                                ))}
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                onClick={() => handlePageChange(trainers.current_page + 1)}
-                                disabled={trainers.current_page === trainers.last_page}
-                            >
-                                <ChevronRight className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                <Pagination data={trainers} onPageChange={handlePageChange} />
             </div>
         </AppLayout>
     );
