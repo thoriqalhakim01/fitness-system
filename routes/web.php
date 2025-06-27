@@ -35,6 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
+Route::get('/join-now', [ClientController::class, 'joinNow'])->name('client.join-now');
+Route::post('/join-now', [ClientController::class, 'handleJoinNow'])->name('client.handle-join-now');
+
 require __DIR__ . '/admin.php';
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

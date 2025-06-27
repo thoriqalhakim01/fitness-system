@@ -38,7 +38,7 @@ export default function WelcomeHeaderLayout() {
                             <Link href="/login">Log In</Link>
                         </Button>
                         <Button size={'sm'} asChild>
-                            <Link href="/new-member">
+                            <Link href="/join-now">
                                 Join Now
                                 <ArrowUpRight />
                             </Link>

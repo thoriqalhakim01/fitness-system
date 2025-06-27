@@ -33,9 +33,9 @@ export default function Welcome() {
                             </p>
                             <div className="flex items-center gap-6">
                                 <Button asChild>
-                                    <Link href="/new-member">Get Started</Link>
+                                    <Link href="/join-us">Get Started</Link>
                                 </Button>
-                                <TextLink href={route('login')} className="group inline-flex items-center gap-1 text-sm">
+                                <TextLink href={''} className="group inline-flex items-center gap-1 text-sm">
                                     Contact Our Staff
                                     <ArrowUpRight
                                         className="transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"

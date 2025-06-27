@@ -175,6 +175,53 @@ class ClientController extends Controller
         }
 
         Log::info('StartTraining method reached', ['request' => $request->all()]);
+    }
 
+    public function joinNow()
+    {
+        $trainers = Trainer::select('id', 'name')->get();
+
+        return Inertia::render('client/join-now', [
+            'trainers' => $trainers,
+            'flash'    => [
+                'success' => session('success'),
+                'error'   => session('error'),
+            ],
+        ]);
+    }
+
+    public function handleJoinNow(Request $request)
+    {
+        $validated = $request->validate([
+            'trainer_id' => 'nullable|exists:trainers,id',
+            'name'       => 'required|string',
+            'email'      => 'required|email|unique:members,email',
+            'phone'      => 'required|numeric|min:3',
+            'birthdate'  => 'required|date',
+            'weight'     => 'nullable|numeric|min:0',
+            'height'     => 'nullable|numeric|min:0',
+        ]);
+
+        try {
+            Member::create([
+                'name'       => $validated['name'],
+                'email'      => $validated['email'],
+                'phone'      => $validated['phone'],
+                'birthdate'  => $validated['birthdate'],
+                'weight'     => $validated['weight'],
+                'height'     => $validated['height'],
+                'trainer_id' => $validated['trainer_id'] ?? null,
+                'status'     => 'inactive',
+            ]);
+
+            return redirect()->route('client.join-now')->with('success', 'Registration successful! Please contact our staff to verify your account and complete the registration process.');
+
+        } catch (\Exception $e) {
+            Log::error('Member registration failed: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Registration failed. Please try again or contact support if the problem persists.');
+        }
     }
 }
