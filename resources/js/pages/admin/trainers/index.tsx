@@ -1,12 +1,13 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle } from 'lucide-react';
-import { useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle, Search } from 'lucide-react';
+import { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 
@@ -23,9 +24,12 @@ type Props = {
         success?: string;
         error?: string;
     };
+    filters?: FilterParams;
 };
 
-export default function Trainers({ trainers, flash }: Props) {
+export default function Trainers({ trainers, flash, filters }: Props) {
+    const [searchTerm, setSearchTerm] = useState(filters?.search);
+
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -33,6 +37,17 @@ export default function Trainers({ trainers, flash }: Props) {
             toast.error(flash.error);
         }
     }, [flash]);
+
+    const applyFilters = () => {
+        const params: FilterParams = {
+            search: searchTerm,
+        };
+
+        router.get(route('admin.trainers.index'), params, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
 
     const handlePageChange = (page: number) => {
         const params: FilterParams = {
@@ -43,6 +58,11 @@ export default function Trainers({ trainers, flash }: Props) {
             preserveState: true,
             preserveScroll: true,
         });
+    };
+
+    const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        applyFilters();
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -58,6 +78,20 @@ export default function Trainers({ trainers, flash }: Props) {
                     </Button>
                 </div>
                 <Separator />
+                <div className="flex items-center justify-between">
+                    <form onSubmit={handleSearch} className="relative max-h-9 w-full">
+                        <Input
+                            type="search"
+                            className="ps-8 lg:w-1/3"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <div className="absolute top-0 left-0 flex h-9 items-center justify-start px-2">
+                            <Search size={16} />
+                        </div>
+                    </form>
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>

@@ -21,10 +21,25 @@ class TrainerController extends Controller
     {
         $query = Trainer::query()->with(['user', 'members']);
 
+        $search = request('search');
+
+        if ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('rfid_uid', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q) use ($search) {
+                        $q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower($search) . '%']);
+                    });
+            });
+        }
+
         $trainers = $query->paginate(20);
 
         return Inertia::render('admin/trainers/index', [
             'trainers' => $trainers,
+            'filters'  => [
+                'search' => request('search', ''),
+            ],
             'flash'    => [
                 'success' => session('success'),
                 'error'   => session('error'),
