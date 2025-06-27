@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Certification;
 use App\Models\Trainer;
+use App\Models\TrainingSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,16 +19,11 @@ class TrainerDashboardController extends Controller
     {
         $user = Auth::user();
 
-        $trainer = Trainer::with(['user', 'members', 'trainingSessions.members', 'certifications'])->where('user_id', $user->id)->first();
-
-        $allAttendances = Attendance::where('attendable_type', 'App\Models\Member')
-            ->whereIn('attendable_id', $trainer->members->pluck('id'))
-            ->get();
+        $trainer = Trainer::with(['user', 'members', 'certifications'])->where('user_id', $user->id)->first();
 
         return Inertia::render('trainer/dashboard', [
-            'trainer'        => $trainer,
-            'allAttendances' => $allAttendances,
-            'flash'          => [
+            'trainer' => $trainer,
+            'flash'   => [
                 'success' => session('success'),
                 'error'   => session('error'),
             ],
@@ -94,5 +90,25 @@ class TrainerDashboardController extends Controller
                 ->with('error', 'Failed to upload certificate. Please try again.')
                 ->withInput();
         }
+    }
+
+    public function trainingSessions()
+    {
+        $user = Auth::user();
+
+        $trainer = Trainer::with('members')->where('user_id', $user->id)->first();
+
+        $query = TrainingSession::with(['trainer', 'members'])->where('trainer_id', $trainer->id);
+
+        $trainingSessions = $query->paginate(20);
+
+        $allAttendances = Attendance::where('attendable_type', 'App\Models\Member')
+            ->whereIn('attendable_id', $trainer->members->pluck('id'))
+            ->get();
+
+        return Inertia::render('trainer/sessions', [
+            'trainingSessions' => $trainingSessions,
+            'allAttendances'   => $allAttendances,
+        ]);
     }
 }

@@ -45,6 +45,11 @@ export const trainerNavItems: NavItem[] = [
         href: '/trainer/dashboard',
         icon: MonitorDot,
     },
+    {
+        title: 'Training Session',
+        href: '/trainer/sessions',
+        icon: Dumbbell,
+    },
 ];
 
 export const adminFooterItems: NavItem[] = [

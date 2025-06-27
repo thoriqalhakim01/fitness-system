@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/certification/add', [TrainerDashboardController::class, 'addCertificate'])->name('certification.create');
             Route::post('/certification', [TrainerDashboardController::class, 'handleAddCertificate'])->name('certification.store');
             Route::delete('/certification/{certification}', [TrainerDashboardController::class, 'deleteCertificate'])->name('certification.destroy');
+            Route::get('/sessions', [TrainerDashboardController::class, 'trainingSessions'])->name('trainer.training-sessions');
             Route::get('/new-member', [MemberController::class, 'newMember'])->name('trainer.new-member');
             Route::post('/new-member', [MemberController::class, 'handleNewMember'])->name('trainer.handle-new-member');
             Route::get('/member/{id}', [MemberController::class, 'showMember'])->name('trainer.show-member');
