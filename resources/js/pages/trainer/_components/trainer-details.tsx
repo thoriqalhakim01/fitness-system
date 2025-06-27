@@ -24,7 +24,12 @@ export default function TrainerDetails({ trainer }: Props) {
 
     return (
         <>
-            <p className="text-2xl font-semibold">{trainer.user.name}</p>
+            <div className="relative h-28 rounded-lg bg-muted-foreground">
+                <div className="absolute top-10 left-8 flex h-24 w-24 items-center justify-center rounded-full border-2 border-white bg-accent-foreground">
+                    <span className="text-4xl font-bold text-accent">{trainer.user.name.slice(0, 1)}</span>
+                </div>
+            </div>
+            <p className="mt-6 text-2xl font-semibold">{trainer.user.name}</p>
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Email:</span>

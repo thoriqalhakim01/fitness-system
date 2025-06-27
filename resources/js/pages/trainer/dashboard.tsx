@@ -1,38 +1,23 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Attendance, Trainer, type BreadcrumbItem } from '@/types';
+import { Trainer } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
 import MemberCard from './_components/member-card';
 import TrainerDetails from './_components/trainer-details';
-import TrainingSessionTable from './_components/training-session';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Trainer',
-        href: '/trainer/dashboard',
-    },
-];
 
 type Props = {
     trainer: Trainer;
-    allAttendances?: Attendance[];
 };
 
-export default function Dashboard({ trainer, allAttendances = [] }: Props) {
-    const [isOpen, setIsOpen] = useState(false);
+export default function Dashboard({ trainer }: Props) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout>
             <Head title="Trainer" />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex flex-col gap-6 lg:flex-row">
                     <div className="col-span-2 flex w-full flex-col gap-4">
                         <TrainerDetails trainer={trainer} />
-                        <div className="flex flex-col gap-4">
-                            <h1 className="text-lg font-medium">Training Session</h1>
-                            <TrainingSessionTable lists={trainer.training_sessions || []} attendances={allAttendances} />
-                        </div>
                     </div>
                     <div className="col-span-3 flex w-full flex-col gap-4">
                         <div className="flex items-center justify-between gap-4">
