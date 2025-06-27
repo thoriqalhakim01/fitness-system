@@ -10,8 +10,8 @@ import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 import { FilterDropdown } from './_components/filter-dropdown';
-import { SearchBar } from './_components/search-bar';
 import { useFilters } from './_hooks/useFilters';
+import { SearchBar } from '@/components/search-bar';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

@@ -15,12 +15,31 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        $query = Transaction::query()->with(['member', 'package']);
+        $query = Transaction::query()->with(['member', 'package'])->orderBy('transaction_date', 'desc');
+
+        $search    = request('search');
+        $startDate = request('start_date');
+        $endDate   = request('end_date');
+
+        if ($search) {
+            $query->whereHas('member', function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
+            });
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('transaction_date', [$startDate, $endDate]);
+        }
 
         $transactions = $query->paginate(20);
 
         return Inertia::render('admin/transactions/index', [
             'transactions' => $transactions,
+            'filters'      => [
+                'search'     => request('search', ''),
+                'start_date' => request('start_date', null),
+                'end_date'   => request('end_date', null),
+            ],
             'flash'        => [
                 'success' => session('success'),
                 'error'   => session('error'),
