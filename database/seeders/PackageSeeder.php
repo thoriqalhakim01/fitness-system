@@ -13,8 +13,14 @@ class PackageSeeder extends Seeder
     {
         $packages = [
             [
-                'name'     => 'Pay/visit',
+                'name'     => 'Custom',
                 'price'    => 0,
+                'points'   => 0,
+                'duration' => 0,
+            ],
+            [
+                'name'     => 'Pay/visit',
+                'price'    => 50000,
                 'points'   => 0,
                 'duration' => 0,
             ],
