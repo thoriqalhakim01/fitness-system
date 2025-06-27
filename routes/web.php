@@ -14,6 +14,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('role:trainer')->group(function () {
         Route::prefix('trainer')->group(function () {
             Route::get('/dashboard', [TrainerDashboardController::class, 'index'])->name('trainer.dashboard');
+            Route::get('/add-certificate', [TrainerDashboardController::class, 'addCertificate'])->name('trainer.add-certificate');
+            Route::get('/certification/add', [TrainerDashboardController::class, 'addCertificate'])->name('certification.create');
+            Route::post('/certification', [TrainerDashboardController::class, 'handleAddCertificate'])->name('certification.store');
+            Route::delete('/certification/{certification}', [TrainerDashboardController::class, 'deleteCertificate'])->name('certification.destroy');
             Route::get('/new-member', [MemberController::class, 'newMember'])->name('trainer.new-member');
             Route::post('/new-member', [MemberController::class, 'handleNewMember'])->name('trainer.handle-new-member');
             Route::get('/member/{id}', [MemberController::class, 'showMember'])->name('trainer.show-member');

@@ -40,3 +40,9 @@ export const getAge = (dateString: string) => {
     }
     return age;
 };
+
+export const getImageUrl = (path: string) => {
+    const baseUrl = import.meta.env.AWS_URL;
+    const bucket = import.meta.env.AWS_BUCKET;
+    return `${baseUrl}/${bucket}/${path}`;
+};

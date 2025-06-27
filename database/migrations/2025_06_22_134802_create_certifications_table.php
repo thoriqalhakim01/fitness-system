@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('certifications', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->foreignUlid('trainer_id')->references('id')->on('trainers')->onDelete('cascade');
             $table->string('name');
             $table->string('image');
