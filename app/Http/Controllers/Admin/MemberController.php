@@ -17,12 +17,50 @@ class MemberController extends Controller
 {
     public function index()
     {
-        $query = Member::query()->with(['trainer.user', 'points']);
+        $query = Member::query()->with(['trainer.user', 'points'])->orderBy('registration_date', 'desc');
+
+        $search    = request('search');
+        $type      = request('type');
+        $status    = request('status');
+        $startDate = request('start_date');
+        $endDate   = request('end_date');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%'])
+                    ->orWhereRaw('LOWER(email) LIKE ?', ['%' . strtolower($search) . '%'])
+                    ->orWhereRaw('LOWER(rfid_uid) LIKE ?', ['%' . strtolower($search) . '%'])
+                    ->orWhereHas('trainer', function ($q) use ($search) {
+                        $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%']);
+                    })
+                ;
+            });
+        }
+
+        if ($type && $type !== 'all') {
+            $isMember = ($type === 'member');
+            $query->where('is_member', $isMember);
+        }
+
+        if ($status && $status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('registration_date', [$startDate, $endDate]);
+        }
 
         $members = $query->paginate(20);
 
         return Inertia::render('admin/members/index', [
             'members' => $members,
+            'filters' => [
+                'search'     => request('search', ''),
+                'status'     => request('status', 'all'),
+                'type'       => request('type', 'all'),
+                'start_date' => request('start_date', null),
+                'end_date'   => request('end_date', null),
+            ],
             'flash'   => [
                 'success' => session('success'),
                 'error'   => session('error'),

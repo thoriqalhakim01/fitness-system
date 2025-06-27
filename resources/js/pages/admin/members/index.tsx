@@ -6,9 +6,12 @@ import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Member, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight, Eye, Hash, PlusCircle } from 'lucide-react';
-import { useEffect } from 'react';
+import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
+import { FilterDropdown } from './_components/filter-dropdown';
+import { SearchBar } from './_components/search-bar';
+import { useFilters } from './_hooks/useFilters';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,9 +26,13 @@ type Props = {
         success?: string;
         error?: string;
     };
+    filters?: FilterParams;
 };
 
-export default function Members({ members, flash }: Props) {
+export default function Members({ members, flash, filters: initialFilters }: Props) {
+    const { searchTerm, filters, setSearchTerm, handleFilterChange, handleSearch, handleApplyFilters, handleClearFilters } =
+        useFilters(initialFilters);
+
     useEffect(() => {
         if (flash?.success) {
             toast.success(flash.success);
@@ -37,12 +44,22 @@ export default function Members({ members, flash }: Props) {
     const handlePageChange = (page: number) => {
         const params: FilterParams = {
             page,
+            search: searchTerm,
+            status: filters.status,
+            type: filters.type,
+            start_date: filters.startDate,
+            end_date: filters.endDate,
         };
 
         router.get(route('admin.members.index'), params, {
             preserveState: true,
             preserveScroll: true,
         });
+    };
+
+    const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        handleSearch();
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -58,6 +75,23 @@ export default function Members({ members, flash }: Props) {
                     </Button>
                 </div>
                 <Separator />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <SearchBar
+                            searchTerm={searchTerm}
+                            onSearchChange={setSearchTerm}
+                            onSearchSubmit={handleSearchSubmit}
+                            placeholder="Search members..."
+                            className="lg:w-96"
+                        />
+                        <FilterDropdown
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            onApplyFilters={handleApplyFilters}
+                            onClearFilters={handleClearFilters}
+                        />
+                    </div>
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
