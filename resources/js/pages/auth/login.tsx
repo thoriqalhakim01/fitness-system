@@ -31,7 +31,7 @@ export default function Login({ status }: LoginProps) {
     };
 
     return (
-        <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
+        <AuthLayout title="Performance Starts Here" description="Log in to turn discipline into results.">
             <Head title="Log in" />
 
             <form className="flex flex-col gap-6" onSubmit={submit}>
