@@ -5,6 +5,7 @@ use App\Models\Member;
 use App\Models\Trainer;
 use App\Models\TrainingSession;
 use App\Models\TrainingSessionMember;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,13 @@ use Inertia\Inertia;
 
 class ClientController extends Controller
 {
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function checkIn()
     {
         return Inertia::render('client/check-in', [
@@ -203,7 +211,7 @@ class ClientController extends Controller
         ]);
 
         try {
-            Member::create([
+            $member = Member::create([
                 'name'       => $validated['name'],
                 'email'      => $validated['email'],
                 'phone'      => $validated['phone'],
@@ -213,6 +221,10 @@ class ClientController extends Controller
                 'trainer_id' => $validated['trainer_id'] ?? null,
                 'status'     => 'inactive',
             ]);
+
+            $registeredBy = 'independently';
+
+            $this->notificationService->sendMemberRegistrationNotification($member, $registeredBy);
 
             return redirect()->route('client.join-now')->with('success', 'Registration successful! Please contact our staff to verify your account and complete the registration process.');
 

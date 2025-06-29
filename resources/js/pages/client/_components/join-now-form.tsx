@@ -159,7 +159,7 @@ export default function JoinNowForm({ trainers }: Props) {
                     <div className="relative">
                         <Input
                             id="weight"
-                            type="tel"
+                            type="text"
                             tabIndex={6}
                             value={data.weight}
                             onChange={(e) => setData('weight', parseFloat(e.target.value) || 0)}
@@ -177,7 +177,7 @@ export default function JoinNowForm({ trainers }: Props) {
                     <div className="relative">
                         <Input
                             id="height"
-                            type="string"
+                            type="text"
                             tabIndex={6}
                             value={data.height}
                             onChange={(e) => setData('height', parseFloat(e.target.value) || 0)}

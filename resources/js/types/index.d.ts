@@ -4,6 +4,25 @@ import type { Config } from 'ziggy-js';
 export interface Auth {
     user: User;
     role: string | null;
+    notifications: Notification[];
+}
+
+export interface Notification {
+    data: NotificationData;
+    notifiable_id: string;
+    notifiable_type: string;
+    read_at: string | null;
+    type: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface NotificationData {
+    id: string;
+    type: string;
+    title: string;
+    message: string;
+    action_url: string;
 }
 
 export interface BreadcrumbItem {
@@ -52,6 +71,10 @@ export interface FilterParams {
     [key: string]: string | number | undefined | null;
 }
 
+export interface Notification {
+    data: any[];
+}
+
 export interface User {
     id: string;
     name: string;
@@ -61,7 +84,7 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    [key: string]: unknown;
 }
 
 export interface Trainer {

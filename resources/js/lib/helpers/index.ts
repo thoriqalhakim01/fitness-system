@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const getCurrencyFormat = (value: number) => {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
@@ -28,6 +30,12 @@ export const getFormatTime = (timestamp: string) => {
 
 export const getStatusFromAttendableType = (attendableType: string): string => {
     return attendableType.split('\\').pop() || '';
+};
+
+export const getDiffForHuman = (timestamp: string) => {
+    const timeago = moment(timestamp).fromNow();
+
+    return timeago;
 };
 
 export const getAge = (dateString: string) => {
