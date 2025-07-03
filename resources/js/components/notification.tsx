@@ -2,7 +2,6 @@ import { getDiffForHuman } from '@/lib/helpers';
 import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { Bell } from 'lucide-react';
-import TextLink from './text-link';
 import { Button } from './ui/button';
 import {
     DropdownMenu,
@@ -37,12 +36,6 @@ export default function Notification() {
                             </Link>
                         </DropdownMenuItem>
                     ))}
-                </div>
-                <DropdownMenuSeparator />
-                <div className="w-full text-center">
-                    <TextLink href={''} className="text-sm">
-                        View all
-                    </TextLink>
                 </div>
             </DropdownMenuContent>
         </DropdownMenu>

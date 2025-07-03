@@ -95,10 +95,10 @@ export default function TrainerDetails({ trainer }: Props) {
                             <p className="col-span-full py-8 text-center text-sm text-muted-foreground">No certification found</p>
                         )}
 
-                        <div className="col-span-full mt-4 flex w-full justify-center">
+                        <div className="col-span-full flex w-full justify-center">
                             <Button size={'sm'} asChild>
                                 <Link href={route('trainer.add-certificate')}>
-                                    <PlusCircle className="mr-1 h-4 w-4" />
+                                    <PlusCircle />
                                     <span>Add Certification</span>
                                 </Link>
                             </Button>

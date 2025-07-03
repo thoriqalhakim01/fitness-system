@@ -1,8 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Trainer } from '@/types';
-import { ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 
 type Props = {
@@ -37,18 +34,6 @@ export default function TrainerDetails({ trainer }: Props) {
                     <span>{trainer.created_at}</span>
                 </div>
             </div>
-            <Collapsible open={isOpen} onOpenChange={setIsOpen} className="flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-4">
-                    <h4 className="text-sm font-semibold">Certifications</h4>
-                    <CollapsibleTrigger asChild>
-                        <Button variant="ghost" size="icon" className="size-8">
-                            <ChevronsUpDown />
-                            <span className="sr-only">Toggle</span>
-                        </Button>
-                    </CollapsibleTrigger>
-                </div>
-                <CollapsibleContent className="flex flex-col gap-2"></CollapsibleContent>
-            </Collapsible>
         </>
     );
 }
