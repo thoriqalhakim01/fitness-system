@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\TrainersExcelExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTrainerRequest;
 use App\Http\Requests\Admin\UpdateTrainerRequest;
 use App\Models\Attendance;
 use App\Models\Trainer;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TrainerController extends Controller
 {
@@ -45,6 +48,22 @@ class TrainerController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new TrainersExcelExport(), 'trainers_' . now()->timezone('Asia/Jakarta')->format('Ymd_His') . '.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $trainers = Trainer::with(['user', 'members'])->get();
+
+        $pdf = Pdf::loadView('exports.trainers-pdf', [
+            'trainers' => $trainers,
+        ]);
+
+        return $pdf->download('trainers_' . now()->timezone('Asia/Jakarta')->format('Ymd_His') . '.pdf');
     }
 
     public function create()
