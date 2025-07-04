@@ -60,6 +60,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/attendances')->group(function () {
             Route::get('/', [AttendanceController::class, 'index'])->name('admin.attendances.index');
+            Route::get('/export-excel', [AttendanceController::class, 'exportExcel'])->name('admin.attendances.export-excel');
+            Route::get('/export-pdf', [AttendanceController::class, 'exportPdf'])->name('admin.attendances.export-pdf');
         });
 
         Route::prefix('/staffs')->group(function () {

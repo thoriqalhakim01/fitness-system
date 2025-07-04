@@ -58,7 +58,7 @@ export function FilterDropdown({ filters, onFilterChange, onApplyFilters, onClea
                             <SelectContent>
                                 <SelectItem value="all">All type</SelectItem>
                                 <SelectItem value="member">Member</SelectItem>
-                                <SelectItem value="non-member">Trainer</SelectItem>
+                                <SelectItem value="trainer">Trainer</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

@@ -1,7 +1,9 @@
+import { ExportDropdown } from '@/components/export-dropdown';
 import { Pagination } from '@/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useExport } from '@/hooks/use-export';
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { getFormatDate, getFormatTime, getStatusFromAttendableType } from '@/lib/helpers';
@@ -10,8 +12,8 @@ import { Head } from '@inertiajs/react';
 import { Hash } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { useFilters } from './_hooks/use-filter';
 import { FilterDropdown } from './_components/filter-dropdown';
+import { useFilters } from './_hooks/use-filter';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -45,6 +47,17 @@ export default function Attendances({ attendances, flash, filters: initialFilter
         }
     });
 
+    const exportHook = useExport({
+        baseRouteName: 'admin.attendances',
+        filters: {
+            type: filters.type,
+            start_date: filters.startDate,
+            end_date: filters.endDate,
+        },
+        successMessage: 'Attendance export completed successfully!',
+        errorMessage: 'Failed to export attendances data',
+    });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Attendances" />
@@ -58,6 +71,7 @@ export default function Attendances({ attendances, flash, filters: initialFilter
                         onApplyFilters={handleApplyFilters}
                         onClearFilters={handleClearFilters}
                     />
+                    <ExportDropdown {...exportHook} />
                 </div>
                 <Table>
                     <TableHeader>
