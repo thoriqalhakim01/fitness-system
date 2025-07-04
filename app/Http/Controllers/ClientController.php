@@ -185,6 +185,51 @@ class ClientController extends Controller
         Log::info('StartTraining method reached', ['request' => $request->all()]);
     }
 
+    public function checkDataHandler($rfid)
+    {
+        try {
+            if (empty($rfid) || strlen($rfid) < 4) {
+                return Inertia::render('client/check-data', [
+                    'error' => 'Invalid RFID UID format. Please scan a valid card.',
+                ]);
+            }
+
+            $cleanRfidUid = trim($rfid);
+
+            $member = Member::with('points')->where('rfid_uid', $cleanRfidUid)->first();
+
+            if (! $member) {
+                return Inertia::render('client/check-data', [
+                    'error' => "Member card '{$cleanRfidUid}' is not registered. Please contact gym staff for registration.",
+                ]);
+            }
+
+            return Inertia::render('client/check-data', [
+                'member'  => $member,
+                'success' => 'Member data loaded successfully',
+            ]);
+
+        } catch (\Exception $th) {
+            Log::error('Error fetching member data: ' . $th->getMessage(), [
+                'rfid_uid'    => $rfid,
+                'stack_trace' => $th->getTraceAsString(),
+            ]);
+
+            return Inertia::render('client/check-data', [
+                'error' => 'System error occurred while checking member data. Please try again or contact support.',
+            ]);
+        }
+    }
+
+    public function logBookHandler($rfid)
+    {
+        $member = Member::with(['trainer.user', 'attendances', 'logs.trainer'])->where('rfid_uid', $rfid)->first();
+
+        return Inertia::render('client/log-book', [
+            'member' => $member,
+        ]);
+    }
+
     public function joinNow()
     {
         $trainers = Trainer::select('id', 'name')->get();

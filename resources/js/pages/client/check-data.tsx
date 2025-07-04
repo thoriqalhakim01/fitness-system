@@ -1,28 +1,60 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ClientLayout from '@/layouts/client-layout';
-import { Head } from '@inertiajs/react';
+import { Member } from '@/types';
+import { Head, router } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import CheckDataDialog from './_components/check-data-dialog';
+import ErrorDialog from './_components/error-dialog';
 
 type Props = {
-    flash?: {
-        success?: string;
-        error?: string;
-    };
+    member: Member;
+    error?: string;
+    success?: string;
 };
 
-export default function CheckData({ flash }: Props) {
-    const [value, setValue] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+export default function CheckData({ member, error, success }: Props) {
+    const [value, setValue] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [dialogOpen, setDialogOpen] = useState<boolean>(!!member);
+    const [showErrorDialog, setShowErrorDialog] = useState<boolean>(!!error);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
-    };
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        setValue(value);
+    }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!value.trim()) return;
+
+        setIsLoading(true);
+
+        router.get(
+            `/check-data/${value.trim()}`,
+            {},
+            {
+                onFinish: () => {
+                    setIsLoading(false);
+                    setValue('');
+                },
+                onError: (errors) => {
+                    console.error('Error fetching member data:', errors);
+                    setIsLoading(false);
+                },
+            },
+        );
+    }
+
+    function handleCloseDialog() {
+        setDialogOpen(false);
+        router.get('/check-data');
+    }
+
+    const handleCloseErrorDialog = () => {
+        setShowErrorDialog(false);
+        router.get('/check-data');
     };
     return (
         <ClientLayout>
@@ -46,6 +78,10 @@ export default function CheckData({ flash }: Props) {
                         Check Data
                     </Button>
                 </form>
+
+                {member && <CheckDataDialog member={member} open={dialogOpen} onClose={handleCloseDialog} />}
+
+                {error && <ErrorDialog error={error} open={showErrorDialog} onClose={handleCloseErrorDialog} />}
             </div>
         </ClientLayout>
     );

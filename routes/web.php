@@ -31,7 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/check-in', [ClientController::class, 'checkIn'])->name('client.check-in');
         Route::get('/check-data', [ClientController::class, 'checkData'])->name('client.check-data');
         Route::get('/check-in/{rfid}', [ClientController::class, 'checkInHandler'])->name('client.check-in-handler');
+        Route::get('/check-data/{rfid}', [ClientController::class, 'checkDataHandler'])->name('client.check-data-handler');
         Route::post('/training/start', [ClientController::class, 'startTraining'])->name('training.start');
+        Route::get('/check-data/{rfid}/log-book', [ClientController::class, 'logBookHandler'])->name('client.log-book');
     });
 });
 
