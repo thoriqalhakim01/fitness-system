@@ -29,6 +29,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/members')->group(function () {
             Route::get('/', [MemberController::class, 'index'])->name('admin.members.index');
+            Route::get('/export-excel', [MemberController::class, 'exportExcel'])->name('admin.members.export-excel');
+            Route::get('/export-pdf', [MemberController::class, 'exportPdf'])->name('admin.members.export-pdf');
             Route::get('/create', [MemberController::class, 'create'])->name('admin.members.create');
             Route::post('/create', [MemberController::class, 'store'])->name('admin.members.store');
             Route::get('/{id}', [MemberController::class, 'show'])->name('admin.members.show');

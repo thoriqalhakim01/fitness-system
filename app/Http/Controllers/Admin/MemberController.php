@@ -1,17 +1,21 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Excel\MembersExcelExport;
+use App\Exports\MembersPdfExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMemberRequest;
 use App\Http\Requests\Admin\UpdateMemberRequest;
 use App\Models\Member;
 use App\Models\Trainer;
 use App\Rules\UniqueRfidAcrossTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -66,6 +70,40 @@ class MemberController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function exportExcel()
+    {
+        $filters = [
+            'search'     => request('search', ''),
+            'status'     => request('status', 'all'),
+            'type'       => request('type', 'all'),
+            'start_date' => request('start_date', null),
+            'end_date'   => request('end_date', null),
+        ];
+
+        return Excel::download(new MembersExcelExport($filters), 'members_' . now()->format('Ymd_His') . '.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $filters = [
+            'search'     => request('search', ''),
+            'status'     => request('status', 'all'),
+            'type'       => request('type', 'all'),
+            'start_date' => request('start_date', null),
+            'end_date'   => request('end_date', null),
+        ];
+
+        $members = (new MembersPdfExport($filters))->query()->get();
+
+        $pdf = Pdf::loadView('exports.members-pdf', [
+            'members' => $members,
+            'filters' => $filters,
+        ]);
+
+        return $pdf->download('members_' . now()->format('Ymd_His') . '.pdf');
+
     }
 
     public function create()

@@ -1,15 +1,16 @@
+import { ExportDropdown } from '@/components/export-dropdown';
 import { Pagination } from '@/components/pagination';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useExport } from '@/hooks/use-export';
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Trainer, type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
-import { ChevronDown, Eye, FileDown, FileText, Hash, Loader2, PlusCircle, Search, Sheet } from 'lucide-react';
+import { Eye, Hash, PlusCircle, Search } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
@@ -32,8 +33,6 @@ type Props = {
 
 export default function Trainers({ trainers, flash, filters }: Props) {
     const [searchTerm, setSearchTerm] = useState(filters?.search);
-    const [isExportingExcel, setIsExportingExcel] = useState(false);
-    const [isExportingPdf, setIsExportingPdf] = useState(false);
 
     useEffect(() => {
         if (flash?.success) {
@@ -65,49 +64,14 @@ export default function Trainers({ trainers, flash, filters }: Props) {
         applyFilters();
     };
 
-    const handleExportExcel = async () => {
-        setIsExportingExcel(true);
-        try {
-            const link = document.createElement('a');
-            link.href = route('admin.trainers.export-excel');
-            link.download = 'trainers.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            setTimeout(() => {
-                toast.success('Excel export completed successfully!');
-            }, 1000);
-        } catch (error) {
-            toast.error('Failed to export Excel file');
-        } finally {
-            setTimeout(() => {
-                setIsExportingExcel(false);
-            }, 2000);
-        }
-    };
-
-    const handleExportPdf = async () => {
-        setIsExportingPdf(true);
-        try {
-            const link = document.createElement('a');
-            link.href = route('admin.trainers.export-pdf');
-            link.download = 'trainers.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            setTimeout(() => {
-                toast.success('PDF export completed successfully!');
-            }, 1000);
-        } catch (error) {
-            toast.error('Failed to export PDF file');
-        } finally {
-            setTimeout(() => {
-                setIsExportingPdf(false);
-            }, 2000);
-        }
-    };
+    const exportHook = useExport({
+        baseRouteName: 'admin.trainers',
+        filters: {
+            search: searchTerm,
+        },
+        successMessage: 'Trainers export completed successfully!',
+        errorMessage: 'Failed to export trainers data',
+    });
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trainers" />
@@ -135,37 +99,7 @@ export default function Trainers({ trainers, flash, filters }: Props) {
                             <Search size={16} />
                         </div>
                     </form>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" disabled={isExportingExcel || isExportingPdf}>
-                                {isExportingExcel || isExportingPdf ? <Loader2 className="animate-spin" /> : <FileDown />}
-                                Export as
-                                <ChevronDown />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-36">
-                            <DropdownMenuItem disabled={isExportingExcel || isExportingPdf}>
-                                <button
-                                    className="flex w-full items-center gap-2"
-                                    onClick={handleExportExcel}
-                                    disabled={isExportingExcel || isExportingPdf}
-                                >
-                                    {isExportingExcel ? <Loader2 className="animate-spin" size={16} /> : <Sheet size={16} />}
-                                    {isExportingExcel ? 'Exporting...' : 'Excel'}
-                                </button>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem disabled={isExportingExcel || isExportingPdf}>
-                                <button
-                                    className="flex w-full items-center gap-2"
-                                    onClick={handleExportPdf}
-                                    disabled={isExportingExcel || isExportingPdf}
-                                >
-                                    {isExportingPdf ? <Loader2 className="animate-spin" size={16} /> : <FileText size={16} />}
-                                    {isExportingPdf ? 'Exporting...' : 'PDF'}
-                                </button>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <ExportDropdown {...exportHook} />
                 </div>
                 <Table>
                     <TableHeader>

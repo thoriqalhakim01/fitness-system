@@ -2,18 +2,21 @@ import { Pagination } from '@/components/pagination';
 import { SearchBar } from '@/components/search-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Member, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Eye, Hash, PlusCircle } from 'lucide-react';
+import { ChevronDown, Eye, FileDown, FileText, Hash, PlusCircle, Sheet } from 'lucide-react';
 import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 import { FilterDropdown } from './_components/filter-dropdown';
 import { useFilters } from './_hooks/useFilters';
+import { useExport } from '@/hooks/use-export';
+import { ExportDropdown } from '@/components/export-dropdown';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -59,6 +62,19 @@ export default function Members({ members, flash, filters: initialFilters }: Pro
         e.preventDefault();
         handleSearch();
     };
+
+    const exportHook = useExport({
+        baseRouteName: 'admin.members',
+        filters: {
+            search: searchTerm,
+            status: filters.status,
+            type: filters.type,
+            start_date: filters.startDate,
+            end_date: filters.endDate,
+        },
+        successMessage: 'Members export completed successfully!',
+        errorMessage: 'Failed to export members data',
+    });
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Members" />
@@ -89,6 +105,7 @@ export default function Members({ members, flash, filters: initialFilters }: Pro
                             onClearFilters={handleClearFilters}
                         />
                     </div>
+                    <ExportDropdown {...exportHook} />
                 </div>
                 <Table>
                     <TableHeader>
