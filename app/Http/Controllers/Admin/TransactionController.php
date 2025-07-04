@@ -1,15 +1,19 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\Excel\TransactionsExcelExport;
+use App\Exports\Pdf\TransactionsPdfExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 use App\Models\Member;
 use App\Models\Package;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
@@ -45,6 +49,35 @@ class TransactionController extends Controller
                 'error'   => session('error'),
             ],
         ]);
+    }
+
+    public function exportExcel()
+    {
+        $filters = [
+            'search'     => request('search', ''),
+            'start_date' => request('start_date', null),
+            'end_date'   => request('end_date', null),
+        ];
+
+        return Excel::download(new TransactionsExcelExport($filters), 'transactions_' . now()->timezone('Asia/Jakarta')->format('Ymd_His') . '.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $filters = [
+            'search'     => request('search', ''),
+            'start_date' => request('start_date', null),
+            'end_date'   => request('end_date', null),
+        ];
+
+        $export = new TransactionsPdfExport($filters);
+
+        $pdf = Pdf::loadView('exports.transactions-pdf', [
+            'transactions' => $export->query()->get(),
+            'filters'      => $filters,
+        ]);
+
+        return $pdf->download('transactions_' . now()->timezone('Asia/Jakarta')->format('Ymd_His') . '.pdf');
     }
 
     public function create()

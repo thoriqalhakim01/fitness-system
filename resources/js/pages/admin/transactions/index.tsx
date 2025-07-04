@@ -1,9 +1,11 @@
+import { ExportDropdown } from '@/components/export-dropdown';
 import { Pagination } from '@/components/pagination';
 import { SearchBar } from '@/components/search-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useExport } from '@/hooks/use-export';
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { getCurrencyFormat, getFormatDate } from '@/lib/helpers';
@@ -60,6 +62,17 @@ export default function Transactions({ transactions, flash, filters: initialFilt
         e.preventDefault();
         handleSearch();
     };
+
+    const exportHook = useExport({
+        baseRouteName: 'admin.transactions',
+        filters: {
+            search: searchTerm,
+            start_date: filters.startDate,
+            end_date: filters.endDate,
+        },
+        successMessage: 'Transaction export completed successfully!',
+        errorMessage: 'Failed to export transactions data',
+    });
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Transactions" />
@@ -90,6 +103,7 @@ export default function Transactions({ transactions, flash, filters: initialFilt
                             onClearFilters={handleClearFilters}
                         />
                     </div>
+                    <ExportDropdown {...exportHook} />
                 </div>
                 <Table>
                     <TableHeader>

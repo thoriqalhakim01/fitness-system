@@ -1,5 +1,5 @@
 <?php
-namespace App\Exports;
+namespace App\Exports\Pdf;
 
 use App\Models\Member;
 use Illuminate\Contracts\View\View;

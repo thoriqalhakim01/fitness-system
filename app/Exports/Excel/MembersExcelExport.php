@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 class MembersExcelExport implements FromQuery, WithHeadings, WithMapping
-{
+{   
     protected $filters;
 
     public function __construct(array $filters = [])

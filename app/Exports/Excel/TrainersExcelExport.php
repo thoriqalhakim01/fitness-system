@@ -1,5 +1,5 @@
 <?php
-namespace App\Exports;
+namespace App\Exports\Excel;
 
 use App\Models\Trainer;
 use Maatwebsite\Excel\Concerns\FromCollection;

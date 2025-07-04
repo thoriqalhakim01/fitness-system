@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Exports\Excel\MembersExcelExport;
-use App\Exports\MembersPdfExport;
+use App\Exports\Pdf\MembersPdfExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMemberRequest;
 use App\Http\Requests\Admin\UpdateMemberRequest;

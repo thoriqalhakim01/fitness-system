@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\TrainersExcelExport;
+use App\Exports\Excel\TrainersExcelExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTrainerRequest;
 use App\Http\Requests\Admin\UpdateTrainerRequest;

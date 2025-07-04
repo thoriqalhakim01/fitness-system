@@ -49,6 +49,8 @@ Route::middleware(['auth', 'verified', 'role:admin|staff'])->group(function () {
 
         Route::prefix('/transactions')->group(function () {
             Route::get('/', [TransactionController::class, 'index'])->name('admin.transactions.index');
+            Route::get('/export-excel', [TransactionController::class, 'exportExcel'])->name('admin.transactions.export-excel');
+            Route::get('/export-pdf', [TransactionController::class, 'exportPdf'])->name('admin.transactions.export-pdf');
             Route::get('/create', [TransactionController::class, 'create'])->name('admin.transactions.create');
             Route::post('/create', [TransactionController::class, 'store'])->name('admin.transactions.store');
             Route::get('/{id}/edit', [TransactionController::class, 'edit'])->name('admin.transactions.edit');
