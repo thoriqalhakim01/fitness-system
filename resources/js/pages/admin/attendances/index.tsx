@@ -5,11 +5,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { getFormatDate, getFormatTime, getStatusFromAttendableType } from '@/lib/helpers';
-import { Attendance, PaginatedResponse, type BreadcrumbItem } from '@/types';
+import { Attendance, FilterParams, PaginatedResponse, type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Hash } from 'lucide-react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useFilters } from './_hooks/use-filter';
+import { FilterDropdown } from './_components/filter-dropdown';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,9 +26,12 @@ type Props = {
         success?: string;
         error?: string;
     };
+    filters?: FilterParams;
 };
 
-export default function Attendances({ attendances, flash }: Props) {
+export default function Attendances({ attendances, flash, filters: initialFilters }: Props) {
+    const { filters, handleFilterChange, handleApplyFilters, handleClearFilters } = useFilters(initialFilters);
+
     const { handlePageChange } = usePagination({
         route: 'admin.attendances.index',
         preserveFilters: false,
@@ -39,12 +44,21 @@ export default function Attendances({ attendances, flash }: Props) {
             toast.error(flash.error);
         }
     });
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Attendances" />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <h1 className="text-2xl font-bold">Attendances History</h1>
                 <Separator />
+                <div className="flex items-center justify-between">
+                    <FilterDropdown
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        onApplyFilters={handleApplyFilters}
+                        onClearFilters={handleClearFilters}
+                    />
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
