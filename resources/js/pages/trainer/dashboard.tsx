@@ -1,0 +1,41 @@
+import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/app-layout';
+import { Trainer } from '@/types';
+import { Head, Link } from '@inertiajs/react';
+import { Plus } from 'lucide-react';
+import MemberCard from './_components/member-card';
+import TrainerDetails from './_components/trainer-details';
+
+type Props = {
+    trainer: Trainer;
+};
+
+export default function Dashboard({ trainer }: Props) {
+    return (
+        <AppLayout>
+            <Head title="Trainer" />
+            <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                <div className="flex flex-col gap-6 lg:flex-row">
+                    <div className="col-span-2 flex w-full flex-col gap-4">
+                        <TrainerDetails trainer={trainer} />
+                    </div>
+                    <div className="col-span-3 flex w-full flex-col gap-4">
+                        <div className="flex items-center justify-between gap-4">
+                            <h1 className="text-lg font-medium">Manage Members</h1>
+                            <Button size={'sm'} asChild>
+                                <Link href={route('trainer.new-member')}>
+                                    <Plus />
+                                    <span className="hidden sm:block">Enroll New Member</span>
+                                </Link>
+                            </Button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            {trainer.members?.map((item) => <MemberCard key={item.id} data={item} />)}
+                            {trainer.members?.length === 0 && <p className="col-span-4 text-center">No member found</p>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </AppLayout>
+    );
+}

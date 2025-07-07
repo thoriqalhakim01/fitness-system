@@ -12,9 +12,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $admin = User::create([
-            'name'              => 'Admin Gym',
-            'email'             => 'admin@example.com',
-            'password'          => bcrypt('12345678'),
+            'name'              => 'Admin BBG',
+            'email'             => 'admin@bigbear.co.id',
+            'password'          => bcrypt('password'),
             'email_verified_at' => now()->timezone('Asia/Jakarta'),
         ]);
 
