@@ -86,7 +86,7 @@ export default function Trainers({ trainers, flash, filters }: Props) {
                     </Button>
                 </div>
                 <Separator />
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                     <form onSubmit={handleSearch} className="relative max-h-9 w-full">
                         <Input
                             type="search"
