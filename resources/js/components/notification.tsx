@@ -27,8 +27,8 @@ export default function Notification() {
                 <div className="w-full space-y-2 py-2">
                     {auth.notifications.map((item) => (
                         <DropdownMenuItem key={item.notifiable_id} asChild>
-                            <Link href={item.data.action_url} className="flex flex-col space-y-1">
-                                <div className="flex w-full items-center justify-between">
+                            <Link href={item.data.action_url} className="flex flex-col items-start space-y-1">
+                                <div className="flex w-full justify-between">
                                     <p className="text-sm font-medium">{item.data.title}</p>
                                     <p className="text-xs text-muted-foreground">{getDiffForHuman(item.created_at)}</p>
                                 </div>

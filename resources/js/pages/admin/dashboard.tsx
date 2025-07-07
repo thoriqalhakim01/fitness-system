@@ -1,68 +1,63 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { Transaction, type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { SharedData, type BreadcrumbItem } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
-import AllMembers from './_components/all-members';
-import MainMetrics from './_components/main-metrics';
-import RecentTransaction from './_components/recent-transaction';
+import QuickStats from './_components/quick-stats';
+import SecondStats from './_components/second-stats';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Overview',
         href: '/dashboard',
     },
 ];
 
-interface Member {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    expires_at: string;
-    days_remaining: number;
-    expires_status: string;
-}
-
 type Props = {
     trainers: number;
-    members: number;
+    activeMembers: number;
+    todayVisits: number;
     monthlyRevenue: number;
-    recentTransactions: Transaction[];
-    expiringMembers: Member[];
-    currentMonth: string;
+    last6MonthsRevenue: Array<{
+        month: string;
+        revenue: number;
+    }>;
 };
 
-export default function Dashboard({ trainers, members, monthlyRevenue, recentTransactions, expiringMembers, currentMonth }: Props) {
+export default function Dashboard({ trainers, activeMembers, todayVisits, monthlyRevenue, last6MonthsRevenue }: Props) {
+    const { auth } = usePage<SharedData>().props;
+
+    const getCurrentDate = () => {
+        return new Date().toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
+            <Head title="Overview" />
             <div className="flex h-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                    <div className="flex flex-col gap-2">
-                        <h1 className="font-serif text-4xl text-balance">Fitness Business Intelligence</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {new Date().toLocaleDateString('id-Id', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                        </p>
-                        <div className="flex w-full flex-col gap-2">
-                            <Button size={'sm'} asChild>
-                                <Link href={route('admin.members.create')}>
+                <div className="grid gap-4 lg:grid-cols-5">
+                    <div className="flex h-full flex-col justify-between">
+                        <div className="space-y-1">
+                            <p className="text-sm">Hello, {auth.user.name}</p>
+                            <h1 className="text-3xl font-semibold text-balance">Menage your Fitness business</h1>
+                            <p className="text-xs text-muted-foreground">{getCurrentDate()}</p>
+                        </div>
+                        <div className="mt-4 w-full space-y-2">
+                            <Button size={'sm'} className="w-full" asChild>
+                                <Link href="">
                                     <Plus />
                                     New Member
                                 </Link>
                             </Button>
-                            <Button size={'sm'} variant={'outline'} asChild>
-                                <Link href={route('admin.transactions.create')}>Record Transactions</Link>
+                            <Button size={'sm'} variant={'outline'} className="w-full" asChild>
+                                <Link href="">All transactions</Link>
                             </Button>
                         </div>
                     </div>
-                    <MainMetrics totalTrainer={trainers} totalMembers={members} monthlyRevenue={monthlyRevenue} currentMonth={currentMonth} />
-                    <div className="col-span-2 rounded-lg border"></div>
+                    <div className="col-span-4">
+                        <QuickStats trainers={trainers} members={activeMembers} todayVisits={todayVisits} monthlyRevenue={monthlyRevenue} />
+                    </div>
                 </div>
-                <div className="grid gap-4 lg:grid-cols-2">
-                    <RecentTransaction recentTransactions={recentTransactions} />
-                    <AllMembers expiringMembers={expiringMembers} />
-                </div>
+                <SecondStats last6MonthsRevenue={last6MonthsRevenue} />
             </div>
         </AppLayout>
     );

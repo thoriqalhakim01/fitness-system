@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
 use App\Models\Member;
 use App\Models\Trainer;
 use App\Models\Transaction;
@@ -14,52 +15,34 @@ class DashboardController extends Controller
     {
         $trainers = Trainer::count();
 
-        $members = Member::where('is_member', true)->count();
+        $activeMembers = Member::where('is_member', true)->count();
 
-        $expiringMembers = Member::with('points')
-            ->where('is_member', true)
-            ->whereHas('points', function ($query) {
-                $query->whereBetween('expires_at', [
-                    Carbon::now()->addDays(7)->startOfDay(),
-                    Carbon::now()->addDays(30)->endOfDay(),
-                ]);
-            })
-            ->take(5)
-            ->get()
-            ->map(function ($member) {
-                $expiresAt     = Carbon::parse($member->points->expires_at);
-                $daysRemaining = round(Carbon::now()->diffInDays($expiresAt));
+        $todayVisits = Attendance::whereDate('created_at', Carbon::today())->count();
 
-                return [
-                    'id'             => $member->id,
-                    'name'           => $member->name,
-                    'email'          => $member->email,
-                    'phone'          => $member->phone,
-                    'expires_at'     => $expiresAt->format('d M Y'),
-                    'days_remaining' => $daysRemaining,
-                    'expires_status' => $daysRemaining <= 7 ? 'critical' : 'warning',
-                ];
-            });
-
-        $currentMonth = Carbon::now()->month;
-        $currentYear  = Carbon::now()->year;
-
-        $monthlyRevenue = Transaction::whereMonth('transaction_date', $currentMonth)
-            ->whereYear('transaction_date', $currentYear)
+        $monthlyRevenue = Transaction::whereMonth('transaction_date', Carbon::now()->month)
+            ->whereYear('transaction_date', Carbon::now()->year)
             ->sum('amount');
 
-        $recentTransactions = Transaction::with(['member', 'package', 'staff'])
-            ->orderBy('transaction_date', 'desc')
-            ->take(8)
-            ->get();
+        $last6MonthsRevenue = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date      = Carbon::now()->subMonths($i);
+            $monthName = $date->format('F');
+            $revenue   = Transaction::whereMonth('transaction_date', $date->month)
+                ->whereYear('transaction_date', $date->year)
+                ->sum('amount');
+
+            $last6MonthsRevenue[] = [
+                'month'   => $monthName,
+                'revenue' => $revenue,
+            ];
+        }
 
         return Inertia::render('admin/dashboard', [
             'trainers'           => $trainers,
-            'members'            => $members,
+            'activeMembers'      => $activeMembers,
+            'todayVisits'        => $todayVisits,
             'monthlyRevenue'     => $monthlyRevenue,
-            'recentTransactions' => $recentTransactions,
-            'expiringMembers'    => $expiringMembers,
-            'currentMonth'       => Carbon::now()->format('F Y'),
+            'last6MonthsRevenue' => $last6MonthsRevenue,
         ]);
     }
 }

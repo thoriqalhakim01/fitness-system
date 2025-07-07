@@ -12,12 +12,12 @@ export default function RecentTransaction({ recentTransactions }: Props) {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-4">
-                <h2 className="font-serif text-lg text-balance">Recent Transactions</h2>
-                <TextLink href={route('admin.transactions.index')} className="group inline-flex items-center gap-1 text-sm">
+                <h2 className="font-serif font-semibold text-balance">Recent Transactions</h2>
+                <TextLink href={route('admin.transactions.index')} className="group inline-flex items-center gap-1 text-xs">
                     View all
                     <ArrowUpRight
                         className="transition-all duration-300 ease-in-out group-hover:translate-x-1 group-hover:-translate-y-1"
-                        size={16}
+                        size={12}
                     />
                 </TextLink>
             </div>

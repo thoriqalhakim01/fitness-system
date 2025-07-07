@@ -3,7 +3,7 @@ import { AlarmClockCheck, ArrowLeftRight, Dumbbell, LayoutGrid, MonitorCog, Moni
 
 export const adminNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Overview',
         href: '/dashboard',
         icon: LayoutGrid,
     },
