@@ -33,7 +33,7 @@ export default function Welcome() {
                             </p>
                             <div className="flex items-center gap-6">
                                 <Button asChild>
-                                    <Link href="/join-us">Get Started</Link>
+                                    <Link href="/join-now">Get Started</Link>
                                 </Button>
                                 <TextLink href={''} className="group inline-flex items-center gap-1 text-sm">
                                     Contact Our Staff
