@@ -7,7 +7,7 @@ export default function WelcomeHeaderLayout() {
     const { auth } = usePage<SharedData>().props;
 
     return (
-        <header className="flex h-16 w-full items-center justify-between text-sm">
+        <header className="flex h-16 w-full items-center justify-between text-sm lg:px-0 px-4">
             <Link href={route('home')} className="flex items-center gap-2 self-center font-medium">
                 <div className="flex h-12 w-12 items-center justify-center">
                     <img src="/logo.png" className="h-12 w-12" alt="Logo" />
