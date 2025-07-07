@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import { SharedData, type BreadcrumbItem } from '@/types';
+import { SharedData, Transaction, type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import QuickStats from './_components/quick-stats';
@@ -22,9 +22,10 @@ type Props = {
         month: string;
         revenue: number;
     }>;
+    recentTransactions: Transaction[];
 };
 
-export default function Dashboard({ trainers, activeMembers, todayVisits, monthlyRevenue, last6MonthsRevenue }: Props) {
+export default function Dashboard({ trainers, activeMembers, todayVisits, monthlyRevenue, last6MonthsRevenue, recentTransactions }: Props) {
     const { auth } = usePage<SharedData>().props;
 
     const getCurrentDate = () => {
@@ -57,7 +58,7 @@ export default function Dashboard({ trainers, activeMembers, todayVisits, monthl
                         <QuickStats trainers={trainers} members={activeMembers} todayVisits={todayVisits} monthlyRevenue={monthlyRevenue} />
                     </div>
                 </div>
-                <SecondStats last6MonthsRevenue={last6MonthsRevenue} />
+                <SecondStats last6MonthsRevenue={last6MonthsRevenue} recentTransactions={recentTransactions} />
             </div>
         </AppLayout>
     );

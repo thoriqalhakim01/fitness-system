@@ -37,12 +37,19 @@ class DashboardController extends Controller
             ];
         }
 
+        $recentTransactions = Transaction::with(['member', 'package'])
+            ->orderBy('transaction_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
         return Inertia::render('admin/dashboard', [
             'trainers'           => $trainers,
             'activeMembers'      => $activeMembers,
             'todayVisits'        => $todayVisits,
             'monthlyRevenue'     => $monthlyRevenue,
             'last6MonthsRevenue' => $last6MonthsRevenue,
+            'recentTransactions' => $recentTransactions,
         ]);
     }
 }
