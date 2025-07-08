@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { Trainer } from '@/types';
 import { Head, Link } from '@inertiajs/react';
@@ -20,19 +21,30 @@ export default function Dashboard({ trainer }: Props) {
                         <TrainerDetails trainer={trainer} />
                     </div>
                     <div className="col-span-3 flex w-full flex-col gap-4">
-                        <div className="flex items-center justify-between gap-4">
-                            <h1 className="text-lg font-medium">Manage Members</h1>
-                            <Button size={'sm'} asChild>
-                                <Link href={route('trainer.new-member')}>
-                                    <Plus />
-                                    <span className="hidden sm:block">Enroll New Member</span>
-                                </Link>
-                            </Button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            {trainer.members?.map((item) => <MemberCard key={item.id} data={item} />)}
-                            {trainer.members?.length === 0 && <p className="col-span-4 text-center">No member found</p>}
-                        </div>
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <CardTitle className="font-serif">Manage Members</CardTitle>
+                                        <CardDescription>Manage your gym members</CardDescription>
+                                    </div>
+                                    <Button size={'sm'} asChild>
+                                        <Link href={route('trainer.new-member')}>
+                                            <Plus />
+                                            <span className="hidden sm:block">Enroll New Member</span>
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {trainer.members?.map((item) => <MemberCard key={item.id} data={item} />)}
+                                    {trainer.members?.length === 0 && (
+                                        <p className="col-span-4 text-center text-sm text-muted-foreground">No member found</p>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
             </div>
