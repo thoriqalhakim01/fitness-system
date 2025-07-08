@@ -38,7 +38,7 @@ export default function EditMemberForm({ member, trainers }: Props) {
 
     const { data, setData, put, processing, errors, reset } = useForm<EditForm>({
         staff_id: auth.user.id,
-        trainer_id: member.trainer.id,
+        trainer_id: member.trainer?.id,
         rfid_uid: member.rfid_uid,
         name: member.name,
         email: member.email,
