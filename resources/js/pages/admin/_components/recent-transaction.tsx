@@ -1,3 +1,4 @@
+import TextLink from '@/components/text-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { getCurrencyFormat, getFormatDate } from '@/lib/helpers';
@@ -9,18 +10,12 @@ type Props = {
 };
 
 export default function RecentTransaction({ recentTransactions }: Props) {
-    const TextLink = ({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) => (
-        <a href={href} className={className}>
-            {children}
-        </a>
-    );
-
     return (
         <Card>
             <CardHeader>
                 <div className="flex items-center justify-between">
                     <div>
-                        <CardTitle className="text-lg">Recent Transactions</CardTitle>
+                        <CardTitle className="font-serif">Recent Transactions</CardTitle>
                         <CardDescription>Latest gym membership transactions</CardDescription>
                     </div>
                     <TextLink
