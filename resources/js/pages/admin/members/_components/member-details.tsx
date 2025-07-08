@@ -35,7 +35,7 @@ export default function MemberDetails({ member }: Props) {
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Trainer:</span>
-                    <span>{member.trainer.user.name}</span>
+                    <span>{member.trainer?.user.name ?? '-'}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Membership type:</span>
@@ -62,11 +62,11 @@ export default function MemberDetails({ member }: Props) {
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Weight:</span>
-                    <span>{member.weight} kg</span>
+                    <span>{member.weight ?? '-'} kg</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Height:</span>
-                    <span>{member.height} cm</span>
+                    <span>{member.height ?? '-'} cm</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                     <span className="font-medium">Email:</span>
