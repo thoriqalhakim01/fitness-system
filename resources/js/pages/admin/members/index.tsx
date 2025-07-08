@@ -1,22 +1,21 @@
+import { ExportDropdown } from '@/components/export-dropdown';
 import { Pagination } from '@/components/pagination';
 import { SearchBar } from '@/components/search-bar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useExport } from '@/hooks/use-export';
 import { usePagination } from '@/hooks/use-pagination';
 import AppLayout from '@/layouts/app-layout';
 import { FilterParams, Member, type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { ChevronDown, Eye, FileDown, FileText, Hash, PlusCircle, Sheet } from 'lucide-react';
+import { Eye, Hash, PlusCircle } from 'lucide-react';
 import { FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { PaginatedResponse } from '../../../types/index';
 import { FilterDropdown } from './_components/filter-dropdown';
 import { useFilters } from './_hooks/useFilters';
-import { useExport } from '@/hooks/use-export';
-import { ExportDropdown } from '@/components/export-dropdown';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,6 +34,7 @@ type Props = {
 };
 
 export default function Members({ members, flash, filters: initialFilters }: Props) {
+    console.log('members', members);
     const { searchTerm, filters, setSearchTerm, handleFilterChange, handleSearch, handleApplyFilters, handleClearFilters } =
         useFilters(initialFilters);
 
@@ -129,7 +129,7 @@ export default function Members({ members, flash, filters: initialFilters }: Pro
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.email}</TableCell>
                                 <TableCell>{item.phone}</TableCell>
-                                <TableCell>{item.trainer.user.name}</TableCell>
+                                <TableCell>{item.trainer?.user.name ?? '-'}</TableCell>
                                 <TableCell className="flex items-center gap-1">
                                     {item.is_member ? (
                                         <Badge variant="default" className="border-green-200 bg-green-100 text-green-800">
